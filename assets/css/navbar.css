@@ -46,14 +46,34 @@
     object-fit: contain;
 }
 
-.brand-text {
+.brand-text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    line-height: 1;
+}
+
+.brand-text-small {
     background: linear-gradient(135deg, #4f9cf9 0%, #64b5f6 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: -0.3px;
+    opacity: 0.9;
+}
+
+.brand-text-main {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
-    letter-spacing: -0.5px;
+    font-size: 1.1rem;
+    letter-spacing: -0.4px;
 }
 
 .nav-links {
@@ -207,8 +227,12 @@ body {
         height: 35px;
     }
 
-    .brand-text {
-        font-size: 1.3rem;
+    .brand-text-small {
+        font-size: 0.75rem;
+    }
+
+    .brand-text-main {
+        font-size: 1rem;
     }
 
     .download-cv-btn {
@@ -297,8 +321,12 @@ body {
         height: 30px;
     }
 
-    .brand-text {
-        font-size: 1.2rem;
+    .brand-text-small {
+        font-size: 0.7rem;
+    }
+
+    .brand-text-main {
+        font-size: 0.9rem;
     }
 
     .download-cv-btn {
@@ -354,6 +382,16 @@ html {
     .download-cv-btn {
         background-color: #16a085;
         border: 2px solid #ffffff;
+    }
+
+    .brand-text-small {
+        -webkit-text-fill-color: #4f9cf9;
+        background: #4f9cf9;
+    }
+
+    .brand-text-main {
+        -webkit-text-fill-color: #ffffff;
+        background: #ffffff;
     }
 }
 

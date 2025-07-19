@@ -14,12 +14,19 @@ class FyuXeraNavbar {
     }
 
     getNavbarHTML() {
+        const isHirePage = this.currentPage === 'hire';
+        const hireButtonClass = isHirePage ? 'active download-cv-btn disabled' : 'download-cv-btn';
+        const hireButtonAttributes = isHirePage ? 'aria-disabled="true" tabindex="-1"' : '';
+        
         return `
             <nav class="fyuxera-navbar">
                 <div class="nav-container">
                     <div class="nav-brand">
                         <img src="assets/images/logo.png" alt="FyuXera Logo" class="brand-logo">
-                        <span class="brand-text">FyuXera</span>
+                        <div class="brand-text-container">
+                            <span class="brand-text-small">FyuXera</span>
+                            <span class="brand-text-main">Sanod D. Mendis</span>
+                        </div>
                     </div>
 
                     <ul class="nav-links" id="navLinks">
@@ -31,7 +38,7 @@ class FyuXeraNavbar {
                     </ul>
 
                     <div class="nav-right">
-                        <a href="assets/sanodmendis.pdf" download class="download-cv-btn">Download CV</a>
+                        <a href="./hire" class="${hireButtonClass}" ${hireButtonAttributes}>Hire Me</a>
                         
                         <div class="mobile-menu-toggle" id="mobileMenuToggle">
                             <span></span>
@@ -55,6 +62,18 @@ class FyuXeraNavbar {
         this.initializeMobileMenu();
         this.addScrollEffect();
         this.addActiveNavHighlight();
+        this.initializeHireButton();
+    }
+
+    initializeHireButton() {
+        const hireButton = document.querySelector('.download-cv-btn');
+        
+        if (hireButton && this.currentPage === 'hire') {
+            hireButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                return false;
+            });
+        }
     }
 
     initializeMobileMenu() {
@@ -138,6 +157,19 @@ class FyuXeraNavbar {
                 background-color: #4f9cf9;
                 border-radius: 1px;
             }
+
+            .download-cv-btn.disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                pointer-events: none;
+                background-color: #6b7280;
+            }
+
+            .download-cv-btn.disabled:hover {
+                background-color: #6b7280;
+                transform: none;
+                box-shadow: none;
+            }
         `;
         document.head.appendChild(style);
     }
@@ -145,6 +177,7 @@ class FyuXeraNavbar {
     updateActivePage(pageName) {
         this.currentPage = pageName;
         const links = document.querySelectorAll('.fyuxera-navbar .nav-links a');
+        const hireButton = document.querySelector('.download-cv-btn');
 
         links.forEach(link => {
             link.classList.remove('active');
@@ -155,6 +188,26 @@ class FyuXeraNavbar {
                 link.classList.add('active');
             }
         });
+
+        // Update hire button state
+        if (hireButton) {
+            if (pageName === 'hire') {
+                hireButton.classList.add('disabled', 'active');
+                hireButton.setAttribute('aria-disabled', 'true');
+                hireButton.setAttribute('tabindex', '-1');
+                hireButton.addEventListener('click', this.preventHireClick);
+            } else {
+                hireButton.classList.remove('disabled', 'active');
+                hireButton.removeAttribute('aria-disabled');
+                hireButton.removeAttribute('tabindex');
+                hireButton.removeEventListener('click', this.preventHireClick);
+            }
+        }
+    }
+
+    preventHireClick(event) {
+        event.preventDefault();
+        return false;
     }
 
     initSectionHighlight(sections = ['home', 'portfolio', 'about', 'products', 'contact']) {
