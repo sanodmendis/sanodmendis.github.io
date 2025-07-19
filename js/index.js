@@ -540,8 +540,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     `;
     document.head.appendChild(style);
-
-    console.log('🚀 Enhanced portfolio loaded with advanced hero scroll animations!');
-    console.log('💡 Try the Konami code: ↑↑↓↓←→←→BA for a surprise!');
-    console.log('✨ Hero content slides left and image slides right with fade effects on scroll!');
 });

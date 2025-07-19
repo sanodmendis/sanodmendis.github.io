@@ -23,11 +23,11 @@ class FyuXeraNavbar {
                     </div>
 
                     <ul class="nav-links" id="navLinks">
-                        <li><a href="./home.html" ${this.currentPage === 'home' ? 'class="active"' : ''}>Home</a></li>
-                        <li><a href="./portfolio.html" ${this.currentPage === 'portfolio' ? 'class="active"' : ''}>Portfolio</a></li>
-                        <li><a href="./about.html" ${this.currentPage === 'about' ? 'class="active"' : ''}>About</a></li>
-                        <li><a href="./products.html" ${this.currentPage === 'products' ? 'class="active"' : ''}>Products</a></li>
-                        <li><a href="./contact.html" ${this.currentPage === 'contact' ? 'class="active"' : ''}>Contact</a></li>
+                        <li><a href="./" ${this.currentPage === 'home' ? 'class="active"' : ''}>Home</a></li>
+                        <li><a href="./portfolio" ${this.currentPage === 'portfolio' ? 'class="active"' : ''}>Portfolio</a></li>
+                        <li><a href="./about" ${this.currentPage === 'about' ? 'class="active"' : ''}>About</a></li>
+                        <li><a href="./products" ${this.currentPage === 'products' ? 'class="active"' : ''}>Products</a></li>
+                        <li><a href="./contact" ${this.currentPage === 'contact' ? 'class="active"' : ''}>Contact</a></li>
                     </ul>
 
                     <div class="nav-right">
