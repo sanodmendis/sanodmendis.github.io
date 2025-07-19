@@ -17,30 +17,80 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let ticking = false;
 
-    function updateParallax() {
+    function updateHeroScrollEffects() {
         const scrolled = window.pageYOffset;
-        const viewportHeight = window.innerHeight;
+        const windowHeight = window.innerHeight;
+        const heroSection = document.querySelector('.hero');
 
-        const hero = document.querySelector('.hero');
-        if (hero) {
-            hero.style.transform = `translateY(${scrolled * 0.3}px)`;
-        }
+        if (!heroSection) return;
+
+        const heroRect = heroSection.getBoundingClientRect();
+        const heroHeight = heroSection.offsetHeight;
+
+        const scrollProgress = Math.min(Math.max(scrolled / (heroHeight * 0.8), 0), 1);
 
         const heroContent = document.querySelector('.hero-content');
         if (heroContent) {
-            heroContent.style.transform = `translateY(${scrolled * 0.1}px)`;
+            const translateX = scrollProgress * -100; 
+            const opacity = 1 - (scrollProgress * 0.8); 
+            const scale = 1 - (scrollProgress * 0.1); 
+
+            heroContent.style.transform = `translateX(${translateX}px) scale(${scale})`;
+            heroContent.style.opacity = Math.max(opacity, 0.2);
         }
 
         const heroImage = document.querySelector('.hero-image');
         if (heroImage) {
-            heroImage.style.transform = `translateY(${scrolled * -0.05}px)`;
+            const translateX = scrollProgress * 100; 
+            const opacity = 1 - (scrollProgress * 0.8); 
+            const scale = 1 - (scrollProgress * 0.05); 
+            const rotateY = scrollProgress * 15; 
+
+            heroImage.style.transform = `translateX(${translateX}px) scale(${scale}) rotateY(${rotateY}deg)`;
+            heroImage.style.opacity = Math.max(opacity, 0.2);
+        }
+
+        const hero = document.querySelector('.hero');
+        if (hero) {
+            const backgroundY = scrollProgress * 50;
+            const backgroundOpacity = 1 - (scrollProgress * 0.3);
+            hero.style.transform = `translateY(${backgroundY}px)`;
+            hero.style.opacity = Math.max(backgroundOpacity, 0.7);
         }
 
         const floatingIcons = document.querySelectorAll('.floating-icon');
         floatingIcons.forEach((icon, index) => {
-            const speed = 0.02 + (index * 0.01);
-            icon.style.transform = `translateY(${scrolled * speed}px)`;
+            const speed = 0.5 + (index * 0.2);
+            const direction = index % 2 === 0 ? 1 : -1;
+            const translateY = scrolled * speed * 0.1;
+            const translateX = scrolled * speed * 0.05 * direction;
+            const rotate = scrolled * 0.1 * direction;
+            const opacity = 1 - (scrollProgress * 0.7);
+
+            icon.style.transform = `translateY(${translateY}px) translateX(${translateX}px) rotate(${rotate}deg)`;
+            icon.style.opacity = Math.max(opacity, 0.1);
         });
+
+        const heroTitle = document.querySelector('.hero-title');
+        if (heroTitle) {
+            const blur = scrollProgress * 3;
+            const scale = 1 + (scrollProgress * 0.1);
+            heroTitle.style.filter = `blur(${blur}px)`;
+            heroTitle.style.transform = `scale(${scale})`;
+        }
+
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        if (scrollIndicator) {
+            const indicatorOpacity = 1 - (scrollProgress * 2);
+            scrollIndicator.style.opacity = Math.max(indicatorOpacity, 0);
+        }
+    }
+
+    function updateParallax() {
+        const scrolled = window.pageYOffset;
+        const viewportHeight = window.innerHeight;
+
+        updateHeroScrollEffects();
 
         const cards = document.querySelectorAll('.glass-card');
         cards.forEach((card, index) => {
@@ -50,13 +100,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const distance = (cardCenter - viewportCenter) / viewportHeight;
             const parallaxOffset = distance * 20;
 
+
             if (rect.top < viewportHeight && rect.bottom > 0) {
                 card.style.transform = `translateY(${parallaxOffset}px)`;
             }
         });
 
+
         ticking = false;
     }
+
 
     function requestParallaxUpdate() {
         if (!ticking) {
@@ -65,7 +118,44 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+
     window.addEventListener('scroll', requestParallaxUpdate);
+
+    const heroObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const hero = entry.target;
+            if (entry.isIntersecting) {
+
+                hero.classList.add('hero-active');
+            } else {
+
+                hero.classList.remove('hero-active');
+
+                if (entry.boundingClientRect.bottom < 0) {
+                    const heroContent = hero.querySelector('.hero-content');
+                    const heroImage = hero.querySelector('.hero-image');
+
+                    if (heroContent) {
+                        heroContent.style.transform = 'translateX(-100px) scale(0.9)';
+                        heroContent.style.opacity = '0.2';
+                    }
+
+                    if (heroImage) {
+                        heroImage.style.transform = 'translateX(100px) scale(0.95) rotateY(20deg)';
+                        heroImage.style.opacity = '0.2';
+                    }
+                }
+            }
+        });
+    }, {
+        rootMargin: '50px',
+        threshold: [0, 0.1, 0.5, 1]
+    });
+
+    const heroSection = document.querySelector('.hero');
+    if (heroSection) {
+        heroObserver.observe(heroSection);
+    }
 
     const observerOptions = {
         threshold: [0, 0.1, 0.3, 0.5],
@@ -77,6 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (entry.isIntersecting) {
                 const element = entry.target;
                 const delay = element.dataset.delay || 0;
+
 
                 setTimeout(() => {
                     element.classList.add('fade-in-active');
@@ -103,10 +194,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const text = subtitle.textContent;
         subtitle.innerHTML = '<span class="typing-text"></span><span class="cursor">|</span>';
 
+
         const typingText = subtitle.querySelector('.typing-text');
         const cursor = subtitle.querySelector('.cursor');
 
+
         cursor.style.animation = 'blink 1s infinite';
+
 
         let i = 0;
         function typeWriter() {
@@ -114,7 +208,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 typingText.textContent += text.charAt(i);
                 i++;
                 setTimeout(typeWriter, 80 + Math.random() * 40); 
+                setTimeout(typeWriter, 80 + Math.random() * 40); 
             } else {
+
 
                 setTimeout(() => {
                     cursor.style.opacity = '0';
@@ -129,21 +225,26 @@ document.addEventListener('DOMContentLoaded', function() {
         let start = 0;
         const startTime = performance.now();
 
+
         function updateCounter(currentTime) {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
 
+
             const easeOutQuart = 1 - Math.pow(1 - progress, 4);
             const current = Math.floor(start + (target - start) * easeOutQuart);
+
 
             const originalText = element.getAttribute('data-original') || element.textContent;
             const suffix = originalText.includes('+') ? '+' : originalText.includes('%') ? '%' : '';
             element.textContent = current + suffix;
 
+
             if (progress < 1) {
                 requestAnimationFrame(updateCounter);
             }
         }
+
 
         requestAnimationFrame(updateCounter);
     }
@@ -158,6 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     statNumber.setAttribute('data-original', text);
                     const number = parseInt(text.match(/\d+/)[0]);
                     statNumber.textContent = '0' + text.replace(/\d+/, '');
+
 
                     setTimeout(() => {
                         animateCounter(statNumber, number);
@@ -175,6 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const glassCards = document.querySelectorAll('.glass-card');
     glassCards.forEach((card, index) => {
 
+
         card.addEventListener('mousemove', function(e) {
             const rect = this.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -184,12 +287,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const rotateX = (y - centerY) / 10;
             const rotateY = (centerX - x) / 10;
 
+
             this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px) scale(1.02)`;
         });
 
         card.addEventListener('mouseleave', function() {
             this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)';
         });
+
 
         card.addEventListener('mouseenter', function() {
             glassCards.forEach((otherCard, otherIndex) => {
@@ -199,6 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
+
 
         card.addEventListener('mouseleave', function() {
             glassCards.forEach(otherCard => {
@@ -211,9 +317,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const floatingIcons = document.querySelectorAll('.floating-icon');
     floatingIcons.forEach((icon, index) => {
 
+
         const randomDelay = Math.random() * 2;
         const randomDuration = 3 + Math.random() * 2;
         const randomAmplitude = 15 + Math.random() * 10;
+
 
         icon.style.animationDelay = randomDelay + 's';
         icon.style.animationDuration = randomDuration + 's';
@@ -235,12 +343,14 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         document.body.appendChild(progressBar);
 
+
         window.addEventListener('scroll', () => {
             const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
             const scrollProgress = (window.scrollY / scrollHeight) * 100;
             progressBar.style.width = scrollProgress + '%';
         });
     }
+
 
     createScrollProgress();
 
@@ -251,8 +361,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
 
+
             this.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
         });
+
 
         btn.addEventListener('mouseleave', function() {
             this.style.transform = 'translate(0, 0)';
@@ -261,6 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const codeEditor = document.querySelector('.code-editor');
     if (codeEditor) {
+
 
         const codeObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -271,7 +384,9 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }, { threshold: 0.3 });
 
+
         codeObserver.observe(codeEditor);
+
 
         codeEditor.addEventListener('mouseenter', function() {
             this.style.boxShadow = '0 35px 100px rgba(0, 0, 0, 0.5), 0 0 40px rgba(59, 130, 246, 0.4)';
@@ -306,6 +421,8 @@ document.addEventListener('DOMContentLoaded', function() {
         scrollTimeout = setTimeout(() => {
 
         }, 16); 
+
+        }, 16); 
     });
 
     function preloadImages() {
@@ -316,9 +433,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+
     preloadImages();
 
     let konamiCode = [];
+    const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; 
+
     const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; 
 
     document.addEventListener('keydown', function(e) {
@@ -327,7 +447,9 @@ document.addEventListener('DOMContentLoaded', function() {
             konamiCode.shift();
         }
 
+
         if (konamiCode.join(',') === konami.join(',')) {
+
 
             document.body.style.animation = 'rainbow 2s ease-in-out';
             setTimeout(() => {
@@ -343,30 +465,83 @@ document.addEventListener('DOMContentLoaded', function() {
             50% { filter: hue-rotate(360deg); }
         }
 
+
         @keyframes blink {
             0%, 50% { opacity: 1; }
             51%, 100% { opacity: 0; }
         }
+
 
         .cursor {
             color: #3b82f6;
             font-weight: 300;
         }
 
+
         .scroll-progress {
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
         }
+
 
         .section-active {
             opacity: 1 !important;
             transform: translateY(0) !important;
         }
 
+
         .fade-in-active {
             opacity: 1 !important;
             transform: translateY(0) scale(1) !important;
             filter: blur(0) !important;
         }
+
+        .hero-active .hero-content,
+        .hero-active .hero-image {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                        opacity 0.3s ease,
+                        filter 0.3s ease;
+        }
+
+        .hero-content {
+            will-change: transform, opacity;
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+        }
+
+        .hero-image {
+            will-change: transform, opacity;
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+        }
+
+        .floating-icon {
+            will-change: transform, opacity;
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+        }
+
+        .hero-title {
+            will-change: transform, filter;
+            transition: transform 0.2s ease-out, filter 0.2s ease-out;
+        }
+
+        .scroll-indicator {
+            transition: opacity 0.3s ease-out;
+        }
+
+        .hero {
+            will-change: transform, opacity;
+            transition: transform 0.1s ease-out, opacity 0.2s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content,
+            .hero-image,
+            .floating-icon {
+                transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+            }
+        }
     `;
     document.head.appendChild(style);
+
+    console.log('🚀 Enhanced portfolio loaded with advanced hero scroll animations!');
+    console.log('💡 Try the Konami code: ↑↑↓↓←→←→BA for a surprise!');
+    console.log('✨ Hero content slides left and image slides right with fade effects on scroll!');
 });
