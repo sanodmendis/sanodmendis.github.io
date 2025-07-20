@@ -17,7 +17,7 @@ class FyuXeraNavbar {
         const isHirePage = this.currentPage === 'hire';
         const hireButtonClass = isHirePage ? 'active download-cv-btn disabled' : 'download-cv-btn';
         const hireButtonAttributes = isHirePage ? 'aria-disabled="true" tabindex="-1"' : '';
-        
+
         return `
             <nav class="fyuxera-navbar">
                 <div class="nav-container">
@@ -30,16 +30,16 @@ class FyuXeraNavbar {
                     </div>
 
                     <ul class="nav-links" id="navLinks">
-                        <li><a href="./" ${this.currentPage === 'home' ? 'class="active"' : ''}>Home</a></li>
-                        <li><a href="./portfolio" ${this.currentPage === 'portfolio' ? 'class="active"' : ''}>Portfolio</a></li>
-                        <li><a href="./about" ${this.currentPage === 'about' ? 'class="active"' : ''}>About</a></li>
-                        <li><a href="./products" ${this.currentPage === 'products' ? 'class="active"' : ''}>Products</a></li>
-                        <li><a href="./contact" ${this.currentPage === 'contact' ? 'class="active"' : ''}>Contact</a></li>
+<li><a href="./" ${this.currentPage === 'home' ? 'class="active"' : ''}>Home</a></li>
+<li><a href="./about" ${this.currentPage === 'about' ? 'class="active"' : ''}>About</a></li>
+<li><a href="./portfolio" ${this.currentPage === 'portfolio' ? 'class="active"' : ''}>Portfolio</a></li>
+<li><a href="./products" ${this.currentPage === 'products' ? 'class="active"' : ''}>Products</a></li>
+<li><a href="./contact" ${this.currentPage === 'contact' ? 'class="active"' : ''}>Contact</a></li>
                     </ul>
 
                     <div class="nav-right">
                         <a href="./hire" class="${hireButtonClass}" ${hireButtonAttributes}>Hire Me</a>
-                        
+
                         <div class="mobile-menu-toggle" id="mobileMenuToggle">
                             <span></span>
                             <span></span>
@@ -67,7 +67,7 @@ class FyuXeraNavbar {
 
     initializeHireButton() {
         const hireButton = document.querySelector('.download-cv-btn');
-        
+
         if (hireButton && this.currentPage === 'hire') {
             hireButton.addEventListener('click', (event) => {
                 event.preventDefault();
@@ -189,7 +189,6 @@ class FyuXeraNavbar {
             }
         });
 
-        // Update hire button state
         if (hireButton) {
             if (pageName === 'hire') {
                 hireButton.classList.add('disabled', 'active');
