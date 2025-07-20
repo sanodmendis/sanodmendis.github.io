@@ -1,12 +1,42 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    const anchorLinks = document.querySelectorAll('a[href^="#"]');
-    anchorLinks.forEach(link => {
+    const cachedElements = {
+        hero: document.querySelector('.hero'),
+        heroTitle: document.querySelector('.hero-title'),
+        heroSubtitle: document.querySelector('.hero-subtitle'),
+        heroDescription: document.querySelector('.hero-description'),
+        heroCta: document.querySelector('.hero-cta'),
+        heroImage: document.querySelector('.hero-image'),
+        floatingIcons: document.querySelectorAll('.floating-icon'),
+        scrollIndicator: document.querySelector('.scroll-indicator'),
+        glassCards: document.querySelectorAll('.glass-card'),
+        sections: document.querySelectorAll('section'),
+        anchorLinks: document.querySelectorAll('a[href^="#"]')
+    };
+
+    let ticking = false;
+    let lastScrollTime = 0;
+    const scrollThrottle = 33; 
+    let frameCount = 0;
+    let lastFrameTime = performance.now();
+
+    function requestParallaxUpdate() {
+        const now = Date.now();
+        if (now - lastScrollTime >= scrollThrottle) {
+            lastScrollTime = now;
+            if (!ticking) {
+                requestAnimationFrame(updateParallax);
+                ticking = true;
+            }
+        }
+    }
+
+    cachedElements.anchorLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                const offsetTop = target.offsetTop - 80; 
+                const offsetTop = target.offsetTop - 80;
                 window.scrollTo({
                     top: offsetTop,
                     behavior: 'smooth'
@@ -15,76 +45,66 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    let ticking = false;
-
     function updateHeroScrollEffects() {
         const scrolled = window.pageYOffset;
         const windowHeight = window.innerHeight;
-        const heroSection = document.querySelector('.hero');
+        const heroRect = cachedElements.hero?.getBoundingClientRect();
+        const heroHeight = cachedElements.hero?.offsetHeight || 0;
 
-        if (!heroSection) return;
-
-        const heroRect = heroSection.getBoundingClientRect();
-        const heroHeight = heroSection.offsetHeight;
+        if (!heroRect || heroHeight === 0) return;
 
         const scrollProgress = Math.min(Math.max(scrolled / (heroHeight * 0.8), 0), 1);
 
-        const heroTitle = document.querySelector('.hero-title');
-        const heroSubtitle = document.querySelector('.hero-subtitle');
-        const heroDescription = document.querySelector('.hero-description');
-        const heroCta = document.querySelector('.hero-cta');
-
-        if (heroTitle) {
+        if (cachedElements.heroTitle) {
             const translateX = scrollProgress * -100;
             const opacity = 1 - (scrollProgress * 0.8);
             const scale = 1 - (scrollProgress * 0.1);
             const blur = scrollProgress * 3;
 
-            heroTitle.style.transform = `translateX(${translateX}px) scale(${scale})`;
-            heroTitle.style.opacity = Math.max(opacity, 0.2);
-            heroTitle.style.filter = `blur(${blur}px)`;
+            cachedElements.heroTitle.style.transform = `translateX(${translateX}px) scale(${scale})`;
+            cachedElements.heroTitle.style.opacity = Math.max(opacity, 0.2);
+            cachedElements.heroTitle.style.filter = `blur(${blur}px)`;
         }
 
-        if (heroSubtitle) {
+        if (cachedElements.heroSubtitle) {
             const translateX = scrollProgress * -80;
             const opacity = 1 - (scrollProgress * 0.8);
-            heroSubtitle.style.transform = `translateX(${translateX}px)`;
-            heroSubtitle.style.opacity = Math.max(opacity, 0.2);
+            cachedElements.heroSubtitle.style.transform = `translateX(${translateX}px)`;
+            cachedElements.heroSubtitle.style.opacity = Math.max(opacity, 0.2);
         }
 
-        if (heroDescription) {
+        if (cachedElements.heroDescription) {
             const translateX = scrollProgress * -60;
             const opacity = 1 - (scrollProgress * 0.8);
-            heroDescription.style.transform = `translateX(${translateX}px)`;
-            heroDescription.style.opacity = Math.max(opacity, 0.2);
+            cachedElements.heroDescription.style.transform = `translateX(${translateX}px)`;
+            cachedElements.heroDescription.style.opacity = Math.max(opacity, 0.2);
         }
 
-        if (heroCta) {
+        if (cachedElements.heroCta) {
             const opacity = 1 - (scrollProgress * 0.8);
-            heroCta.style.opacity = Math.max(opacity, 0.2);
+            cachedElements.heroCta.style.opacity = Math.max(opacity, 0.2);
         }
 
-        const heroImage = document.querySelector('.hero-image');
-        if (heroImage) {
+        if (cachedElements.heroImage) {
             const translateX = scrollProgress * 100;
             const opacity = 1 - (scrollProgress * 0.8);
             const scale = 1 - (scrollProgress * 0.05);
             const rotateY = scrollProgress * 15;
 
-            heroImage.style.transform = `translateX(${translateX}px) scale(${scale}) rotateY(${rotateY}deg)`;
-            heroImage.style.opacity = Math.max(opacity, 0.2);
+            cachedElements.heroImage.style.transform = `translateX(${translateX}px) scale(${scale}) rotateY(${rotateY}deg)`;
+            cachedElements.heroImage.style.opacity = Math.max(opacity, 0.2);
         }
 
-        const hero = document.querySelector('.hero');
-        if (hero) {
+        if (cachedElements.hero) {
             const backgroundY = scrollProgress * 50;
             const backgroundOpacity = 1 - (scrollProgress * 0.3);
-            hero.style.transform = `translateY(${backgroundY}px)`;
-            hero.style.opacity = Math.max(backgroundOpacity, 0.7);
+            cachedElements.hero.style.transform = `translateY(${backgroundY}px)`;
+            cachedElements.hero.style.opacity = Math.max(backgroundOpacity, 0.7);
         }
 
-        const floatingIcons = document.querySelectorAll('.floating-icon');
-        floatingIcons.forEach((icon, index) => {
+        cachedElements.floatingIcons.forEach((icon, index) => {
+            if (!isInViewport(icon)) return;
+
             const speed = 0.5 + (index * 0.2);
             const direction = index % 2 === 0 ? 1 : -1;
             const translateY = scrolled * speed * 0.1;
@@ -96,10 +116,9 @@ document.addEventListener('DOMContentLoaded', function() {
             icon.style.opacity = Math.max(opacity, 0.1);
         });
 
-        const scrollIndicator = document.querySelector('.scroll-indicator');
-        if (scrollIndicator) {
+        if (cachedElements.scrollIndicator) {
             const indicatorOpacity = 1 - (scrollProgress * 2);
-            scrollIndicator.style.opacity = Math.max(indicatorOpacity, 0);
+            cachedElements.scrollIndicator.style.opacity = Math.max(indicatorOpacity, 0);
         }
     }
 
@@ -109,8 +128,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         updateHeroScrollEffects();
 
-        const cards = document.querySelectorAll('.glass-card');
-        cards.forEach((card, index) => {
+        cachedElements.glassCards.forEach((card, index) => {
+            if (!isInViewport(card)) return;
+
             const rect = card.getBoundingClientRect();
             const cardCenter = rect.top + rect.height / 2;
             const viewportCenter = viewportHeight / 2;
@@ -147,30 +167,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 hero.classList.remove('hero-active');
 
                 if (entry.boundingClientRect.bottom < 0) {
-                    const heroTitle = hero.querySelector('.hero-title');
-                    const heroSubtitle = hero.querySelector('.hero-subtitle');
-                    const heroDescription = hero.querySelector('.hero-description');
-                    const heroImage = hero.querySelector('.hero-image');
-
-                    if (heroTitle) {
-                        heroTitle.style.transform = 'translateX(-100px) scale(0.9)';
-                        heroTitle.style.opacity = '0.2';
-                        heroTitle.style.filter = 'blur(3px)';
+                    if (cachedElements.heroTitle) {
+                        cachedElements.heroTitle.style.transform = 'translateX(-100px) scale(0.9)';
+                        cachedElements.heroTitle.style.opacity = '0.2';
+                        cachedElements.heroTitle.style.filter = 'blur(3px)';
                     }
 
-                    if (heroSubtitle) {
-                        heroSubtitle.style.transform = 'translateX(-80px)';
-                        heroSubtitle.style.opacity = '0.2';
+                    if (cachedElements.heroSubtitle) {
+                        cachedElements.heroSubtitle.style.transform = 'translateX(-80px)';
+                        cachedElements.heroSubtitle.style.opacity = '0.2';
                     }
 
-                    if (heroDescription) {
-                        heroDescription.style.transform = 'translateX(-60px)';
-                        heroDescription.style.opacity = '0.2';
+                    if (cachedElements.heroDescription) {
+                        cachedElements.heroDescription.style.transform = 'translateX(-60px)';
+                        cachedElements.heroDescription.style.opacity = '0.2';
                     }
 
-                    if (heroImage) {
-                        heroImage.style.transform = 'translateX(100px) scale(0.95) rotateY(20deg)';
-                        heroImage.style.opacity = '0.2';
+                    if (cachedElements.heroImage) {
+                        cachedElements.heroImage.style.transform = 'translateX(100px) scale(0.95) rotateY(20deg)';
+                        cachedElements.heroImage.style.opacity = '0.2';
                     }
                 }
             }
@@ -180,13 +195,12 @@ document.addEventListener('DOMContentLoaded', function() {
         threshold: [0, 0.1, 0.5, 1]
     });
 
-    const heroSection = document.querySelector('.hero');
-    if (heroSection) {
-        heroObserver.observe(heroSection);
+    if (cachedElements.hero) {
+        heroObserver.observe(cachedElements.hero);
     }
 
     const observerOptions = {
-        threshold: [0, 0.1, 0.3, 0.5],
+        threshold: [0.1],
         rootMargin: '-50px 0px -50px 0px'
     };
 
@@ -308,6 +322,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
         card.addEventListener('mousemove', function(e) {
+            if (!isInViewport(card)) return;
+
             const rect = this.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -326,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
         card.addEventListener('mouseenter', function() {
-            glassCards.forEach((otherCard, otherIndex) => {
+            cachedElements.glassCards.forEach((otherCard, otherIndex) => {
                 if (otherIndex !== index) {
                     otherCard.style.opacity = '0.7';
                     otherCard.style.transform = 'scale(0.98)';
@@ -336,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
         card.addEventListener('mouseleave', function() {
-            glassCards.forEach(otherCard => {
+            cachedElements.glassCards.forEach(otherCard => {
                 otherCard.style.opacity = '1';
                 otherCard.style.transform = 'scale(1)';
             });
@@ -377,7 +393,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
             const scrollProgress = (window.scrollY / scrollHeight) * 100;
             progressBar.style.width = scrollProgress + '%';
-        });
+        }, { passive: true });
     }
 
 
@@ -407,7 +423,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const codeObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.boxShadow = '0 25px 80px rgba(0, 0, 0, 0.4), 0 0 30px rgba(59, 130, 246, 0.3)';
+                    entry.target.style.boxShadow = '0 15px 50px rgba(0, 0, 0, 0.3), 0 0 20px rgba(59, 130, 246, 0.2)';
                     entry.target.style.transform = 'translateY(-5px)';
                 }
             });
@@ -418,17 +434,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
         codeEditor.addEventListener('mouseenter', function() {
-            this.style.boxShadow = '0 35px 100px rgba(0, 0, 0, 0.5), 0 0 40px rgba(59, 130, 246, 0.4)';
-            this.style.transform = 'translateY(-10px) scale(1.02)';
+            this.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.4), 0 0 25px rgba(59, 130, 246, 0.25)';
+            this.style.transform = 'translateY(-8px) scale(1.02)';
         });
 
         codeEditor.addEventListener('mouseleave', function() {
-            this.style.boxShadow = '0 25px 80px rgba(0, 0, 0, 0.4), 0 0 30px rgba(59, 130, 246, 0.3)';
+            this.style.boxShadow = '0 15px 50px rgba(0, 0, 0, 0.3), 0 0 20px rgba(59, 130, 246, 0.2)';
             this.style.transform = 'translateY(-5px) scale(1)';
         });
     }
 
-    const sections = document.querySelectorAll('section');
     const sectionObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -439,7 +454,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, { threshold: 0.1 });
 
-    sections.forEach(section => {
+    cachedElements.sections.forEach(section => {
         section.style.transition = 'opacity 1s ease, transform 1s ease';
         sectionObserver.observe(section);
     });
@@ -532,50 +547,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         opacity 0.3s ease,
                         filter 0.3s ease;
         }
-
-        .hero-title {
-            will-change: transform, opacity, filter;
-            transition: transform 0.1s ease-out, opacity 0.1s ease-out, filter 0.1s ease-out;
-        }
-
-        .hero-subtitle {
-            will-change: transform, opacity;
-            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
-        }
-
-        .hero-description {
-            will-change: transform, opacity;
-            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
-        }
-
-        .hero-image {
-            will-change: transform, opacity;
-            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
-        }
-
-        .floating-icon {
-            will-change: transform, opacity;
-            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
-        }
-
-        .scroll-indicator {
-            transition: opacity 0.3s ease-out;
-        }
-
-        .hero {
-            will-change: transform, opacity;
-            transition: transform 0.1s ease-out, opacity 0.2s ease-out;
-        }
-
-        @media (max-width: 768px) {
-            .hero-title,
-            .hero-subtitle,
-            .hero-description,
-            .hero-image,
-            .floating-icon {
-                transition: transform 0.2s ease-out, opacity 0.2s ease-out;
-            }
-        }
     `;
     document.head.appendChild(style);
+
+    window.addEventListener('scroll', requestParallaxUpdate, { passive: true });
 });

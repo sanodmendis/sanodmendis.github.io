@@ -2,10 +2,10 @@
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
     position: relative;
     overflow: hidden;
-    min-height: 100vh; 
+    min-height: 100vh;
     display: flex;
     align-items: center;
-    padding-top: 5%; 
+    padding-top: 5%;
 }
 
 .hero::before {
@@ -19,7 +19,6 @@
         radial-gradient(circle at 30% 40%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
         radial-gradient(circle at 70% 60%, rgba(147, 51, 234, 0.1) 0%, transparent 50%);
     animation: parallaxFloat 20s ease-in-out infinite;
-    will-change: transform;
 }
 
 .hero-layout {
@@ -42,6 +41,7 @@
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 1rem;
+    will-change: transform, opacity;
 }
 
 .title-line {
@@ -50,7 +50,7 @@
 
 .highlight {
     background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
-    background-size: 300% 300%;
+    background-size: 200% 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -64,6 +64,7 @@
     margin-bottom: 1.5rem;
     opacity: 0;
     animation: fadeInUp 1s ease 0.5s forwards;
+    will-change: transform, opacity;
 }
 
 .hero-description {
@@ -73,6 +74,7 @@
     margin-bottom: 1.5rem;
     opacity: 0;
     animation: fadeInUp 1s ease 0.8s forwards;
+    will-change: transform, opacity;
 }
 
 .hero-tagline {
@@ -114,6 +116,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
+    will-change: transform, opacity;
 }
 
 .image-container {
@@ -143,7 +146,7 @@
     border-radius: 50%;
     border: 3px solid rgba(59, 130, 246, 0.3);
     box-shadow: 
-        0 25px 80px rgba(0, 0, 0, 0.4),
+        0 15px 50px rgba(0, 0, 0, 0.3),
         0 0 0 1px rgba(255, 255, 255, 0.1);
     transition: all 0.6s ease;
 }
@@ -156,7 +159,7 @@
     bottom: -3px;
     border-radius: 50%;
     background: linear-gradient(45deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6);
-    background-size: 300% 300%;
+    background-size: 200% 200%;
     animation: gradientRotate 4s linear infinite;
     z-index: -1;
 }
@@ -171,10 +174,11 @@
 
 .floating-icon {
     position: absolute;
-    font-size: 2rem;
+    font-size: 1.5rem;
     opacity: 0.7;
     pointer-events: none;
-    animation: float 3s ease-in-out infinite;
+    animation: float 4s ease-in-out infinite;
+    will-change: transform, opacity;
 }
 
 .floating-icon:nth-child(1) {
@@ -243,7 +247,7 @@
 
 .glass-card {
     background: rgba(30, 41, 59, 0.7);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(59, 130, 246, 0.2);
     border-radius: 20px;
     padding: 2.5rem;
@@ -251,6 +255,7 @@
     position: relative;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
+    will-change: transform, opacity;
 }
 
 .glass-card::before {
@@ -272,8 +277,8 @@
     transform: translateY(-10px);
     border-color: rgba(59, 130, 246, 0.4);
     box-shadow: 
-        0 25px 60px rgba(0, 0, 0, 0.3),
-        0 0 30px rgba(59, 130, 246, 0.2);
+        0 15px 40px rgba(0, 0, 0, 0.2),
+        0 0 20px rgba(59, 130, 246, 0.15);
 }
 
 .card-icon-wrapper {
@@ -399,13 +404,13 @@
     background: #0f172a;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(59, 130, 246, 0.2);
     transition: all 0.3s ease;
 }
 
 .code-editor:hover {
-    box-shadow: 0 35px 100px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
     transform: translateY(-5px);
 }
 
@@ -533,14 +538,14 @@
 
 .cta-glass-card {
     background: rgba(30, 41, 59, 0.8);
-    backdrop-filter: blur(30px);
+    backdrop-filter: blur(15px);
     border: 1px solid rgba(59, 130, 246, 0.3);
     border-radius: 24px;
     padding: 4rem;
     text-align: center;
     position: relative;
     z-index: 2;
-    box-shadow: 0 35px 100px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
 }
 
 .cta-title {
@@ -610,7 +615,7 @@
         transform: translateY(0px) rotate(0deg);
     }
     50% {
-        transform: translateY(-20px) rotate(5deg);
+        transform: translateY(-15px) rotate(3deg);
     }
 }
 
@@ -684,11 +689,17 @@
     
     .cta-glass-card {
         padding: 2.5rem 1.5rem;
+        backdrop-filter: blur(10px);
     }
     
     .cta-buttons {
         flex-direction: column;
         align-items: center;
+    }
+    
+    .floating-icon {
+        animation: none !important;
+        opacity: 0.5;
     }
     
     .btn-lg {
