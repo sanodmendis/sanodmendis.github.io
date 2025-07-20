@@ -357,13 +357,6 @@ html {
     scroll-behavior: smooth;
 }
 
-.nav-links a:focus,
-.mobile-menu-toggle:focus,
-.download-cv-btn:focus {
-    outline: 2px solid #4f9cf9;
-    outline-offset: 2px;
-}
-
 @media (prefers-contrast: high) {
     .fyuxera-navbar {
         background-color: #000000;
