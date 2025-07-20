@@ -536,23 +536,12 @@
     animation: float 7s ease-in-out infinite;
 }
 
-.cta-glass-card {
-    background: rgba(30, 41, 59, 0.8);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(59, 130, 246, 0.3);
-    border-radius: 24px;
-    padding: 4rem;
-    text-align: center;
-    position: relative;
-    z-index: 2;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
-}
-
 .cta-title {
     font-size: clamp(2rem, 4vw, 2.5rem);
     font-weight: 700;
     margin-bottom: 1.5rem;
     color: #ffffff;
+    text-align: center;
 }
 
 .cta-description {
@@ -563,6 +552,7 @@
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+    text-align: center;
 }
 
 .cta-buttons {
@@ -687,11 +677,6 @@
         gap: 2rem;
     }
     
-    .cta-glass-card {
-        padding: 2.5rem 1.5rem;
-        backdrop-filter: blur(10px);
-    }
-    
     .cta-buttons {
         flex-direction: column;
         align-items: center;
@@ -726,9 +711,5 @@
     
     .code-demo {
         max-width: 100%;
-    }
-    
-    .cta-glass-card {
-        padding: 2rem 1rem;
     }
 }
