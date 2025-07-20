@@ -29,22 +29,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const scrollProgress = Math.min(Math.max(scrolled / (heroHeight * 0.8), 0), 1);
 
-        const heroContent = document.querySelector('.hero-content');
-        if (heroContent) {
-            const translateX = scrollProgress * -100; 
-            const opacity = 1 - (scrollProgress * 0.8); 
-            const scale = 1 - (scrollProgress * 0.1); 
+        const heroTitle = document.querySelector('.hero-title');
+        const heroSubtitle = document.querySelector('.hero-subtitle');
+        const heroDescription = document.querySelector('.hero-description');
+        const heroCta = document.querySelector('.hero-cta');
 
-            heroContent.style.transform = `translateX(${translateX}px) scale(${scale})`;
-            heroContent.style.opacity = Math.max(opacity, 0.2);
+        if (heroTitle) {
+            const translateX = scrollProgress * -100;
+            const opacity = 1 - (scrollProgress * 0.8);
+            const scale = 1 - (scrollProgress * 0.1);
+            const blur = scrollProgress * 3;
+
+            heroTitle.style.transform = `translateX(${translateX}px) scale(${scale})`;
+            heroTitle.style.opacity = Math.max(opacity, 0.2);
+            heroTitle.style.filter = `blur(${blur}px)`;
+        }
+
+        if (heroSubtitle) {
+            const translateX = scrollProgress * -80;
+            const opacity = 1 - (scrollProgress * 0.8);
+            heroSubtitle.style.transform = `translateX(${translateX}px)`;
+            heroSubtitle.style.opacity = Math.max(opacity, 0.2);
+        }
+
+        if (heroDescription) {
+            const translateX = scrollProgress * -60;
+            const opacity = 1 - (scrollProgress * 0.8);
+            heroDescription.style.transform = `translateX(${translateX}px)`;
+            heroDescription.style.opacity = Math.max(opacity, 0.2);
+        }
+
+        if (heroCta) {
+            const opacity = 1 - (scrollProgress * 0.8);
+            heroCta.style.opacity = Math.max(opacity, 0.2);
         }
 
         const heroImage = document.querySelector('.hero-image');
         if (heroImage) {
-            const translateX = scrollProgress * 100; 
-            const opacity = 1 - (scrollProgress * 0.8); 
-            const scale = 1 - (scrollProgress * 0.05); 
-            const rotateY = scrollProgress * 15; 
+            const translateX = scrollProgress * 100;
+            const opacity = 1 - (scrollProgress * 0.8);
+            const scale = 1 - (scrollProgress * 0.05);
+            const rotateY = scrollProgress * 15;
 
             heroImage.style.transform = `translateX(${translateX}px) scale(${scale}) rotateY(${rotateY}deg)`;
             heroImage.style.opacity = Math.max(opacity, 0.2);
@@ -70,14 +95,6 @@ document.addEventListener('DOMContentLoaded', function() {
             icon.style.transform = `translateY(${translateY}px) translateX(${translateX}px) rotate(${rotate}deg)`;
             icon.style.opacity = Math.max(opacity, 0.1);
         });
-
-        const heroTitle = document.querySelector('.hero-title');
-        if (heroTitle) {
-            const blur = scrollProgress * 3;
-            const scale = 1 + (scrollProgress * 0.1);
-            heroTitle.style.filter = `blur(${blur}px)`;
-            heroTitle.style.transform = `scale(${scale})`;
-        }
 
         const scrollIndicator = document.querySelector('.scroll-indicator');
         if (scrollIndicator) {
@@ -125,19 +142,30 @@ document.addEventListener('DOMContentLoaded', function() {
         entries.forEach(entry => {
             const hero = entry.target;
             if (entry.isIntersecting) {
-
                 hero.classList.add('hero-active');
             } else {
-
                 hero.classList.remove('hero-active');
 
                 if (entry.boundingClientRect.bottom < 0) {
-                    const heroContent = hero.querySelector('.hero-content');
+                    const heroTitle = hero.querySelector('.hero-title');
+                    const heroSubtitle = hero.querySelector('.hero-subtitle');
+                    const heroDescription = hero.querySelector('.hero-description');
                     const heroImage = hero.querySelector('.hero-image');
 
-                    if (heroContent) {
-                        heroContent.style.transform = 'translateX(-100px) scale(0.9)';
-                        heroContent.style.opacity = '0.2';
+                    if (heroTitle) {
+                        heroTitle.style.transform = 'translateX(-100px) scale(0.9)';
+                        heroTitle.style.opacity = '0.2';
+                        heroTitle.style.filter = 'blur(3px)';
+                    }
+
+                    if (heroSubtitle) {
+                        heroSubtitle.style.transform = 'translateX(-80px)';
+                        heroSubtitle.style.opacity = '0.2';
+                    }
+
+                    if (heroDescription) {
+                        heroDescription.style.transform = 'translateX(-60px)';
+                        heroDescription.style.opacity = '0.2';
                     }
 
                     if (heroImage) {
@@ -207,6 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (i < text.length) {
                 typingText.textContent += text.charAt(i);
                 i++;
+                setTimeout(typeWriter, 80 + Math.random() * 40);
                 setTimeout(typeWriter, 80 + Math.random() * 40); 
                 setTimeout(typeWriter, 80 + Math.random() * 40); 
             } else {
@@ -422,7 +451,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         }, 16); 
 
-        }, 16); 
+        }, 16);
     });
 
     function preloadImages() {
@@ -495,14 +524,26 @@ document.addEventListener('DOMContentLoaded', function() {
             filter: blur(0) !important;
         }
 
-        .hero-active .hero-content,
+        .hero-active .hero-title,
+        .hero-active .hero-subtitle,
+        .hero-active .hero-description,
         .hero-active .hero-image {
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
                         opacity 0.3s ease,
                         filter 0.3s ease;
         }
 
-        .hero-content {
+        .hero-title {
+            will-change: transform, opacity, filter;
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out, filter 0.1s ease-out;
+        }
+
+        .hero-subtitle {
+            will-change: transform, opacity;
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+        }
+
+        .hero-description {
             will-change: transform, opacity;
             transition: transform 0.1s ease-out, opacity 0.1s ease-out;
         }
@@ -517,11 +558,6 @@ document.addEventListener('DOMContentLoaded', function() {
             transition: transform 0.1s ease-out, opacity 0.1s ease-out;
         }
 
-        .hero-title {
-            will-change: transform, filter;
-            transition: transform 0.2s ease-out, filter 0.2s ease-out;
-        }
-
         .scroll-indicator {
             transition: opacity 0.3s ease-out;
         }
@@ -532,7 +568,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         @media (max-width: 768px) {
-            .hero-content,
+            .hero-title,
+            .hero-subtitle,
+            .hero-description,
             .hero-image,
             .floating-icon {
                 transition: transform 0.2s ease-out, opacity 0.2s ease-out;
