@@ -221,16 +221,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, observerOptions);
 
-    const fadeElements = document.querySelectorAll('.glass-card, .experience-highlight, .cta-glass-card, .stat-item');
-    fadeElements.forEach((el, index) => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(40px) scale(0.95)';
-        el.style.filter = 'blur(5px)';
-        el.style.transition = 'opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.8s ease';
-        el.dataset.delay = index * 100;
-        fadeInObserver.observe(el);
-    });
-
     const subtitle = document.querySelector('.hero-subtitle');
     if (subtitle) {
         const text = subtitle.textContent;
