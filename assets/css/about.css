@@ -1,74 +1,21 @@
 .about-hero {
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-    min-height: 40vh;
+    min-height: 10vh; 
     display: flex;
     align-items: center;
     position: relative;
     overflow: hidden;
-    padding: 6rem 0 4rem;
-}
-
-.hero-background {
-    position: absolute;
-    inset: 0;
-}
-
-.floating-particles {
-    position: absolute;
-    inset: 0;
-    background-image: 
-        radial-gradient(2px 2px at 20px 30px, rgba(59, 130, 246, 0.3), transparent),
-        radial-gradient(2px 2px at 40px 70px, rgba(147, 51, 234, 0.3), transparent),
-        radial-gradient(1px 1px at 90px 40px, rgba(6, 182, 212, 0.3), transparent);
-    animation: particleFloat 20s linear infinite;
-}
-
-.geometric-bg {
-    position: absolute;
-    inset: 0;
-}
-
-.geometric-bg .shape {
-    position: absolute;
-    opacity: 0.1;
-    border-radius: 20px;
-}
-
-.geometric-bg .shape-1 {
-    top: 15%;
-    left: 10%;
-    width: 120px;
-    height: 120px;
-    background: linear-gradient(45deg, #3b82f6, #8b5cf6);
-    animation: float 8s ease-in-out infinite;
-}
-
-.geometric-bg .shape-2 {
-    top: 50%;
-    right: 15%;
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(45deg, #06b6d4, #3b82f6);
-    border-radius: 50%;
-    animation: float 10s ease-in-out infinite reverse;
-}
-
-.geometric-bg .shape-3 {
-    bottom: 25%;
-    left: 20%;
-    width: 100px;
-    height: 100px;
-    background: linear-gradient(45deg, #8b5cf6, #06b6d4);
-    transform: rotate(45deg);
-    animation: float 12s ease-in-out infinite;
+    padding: 3rem 0 2rem; 
+    contain: layout paint style;
 }
 
 .page-title {
-    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-size: clamp(1.5rem, 3vw, 2rem);
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 1rem;
     text-align: center;
+    will-change: transform, opacity;
 }
 
 .title-accent {
@@ -83,7 +30,7 @@
 }
 
 .hero-subtitle {
-    font-size: 1.25rem;
+    font-size: 1.0rem;
     color: #94a3b8;
     text-align: center;
     font-weight: 500;
@@ -93,6 +40,7 @@
 
 .intro-section {
     margin-top: 2rem;
+    contain: layout paint style;
 }
 
 .intro-grid {
@@ -146,8 +94,9 @@
     background: rgba(30, 41, 59, 0.5);
     border: 1px solid rgba(59, 130, 246, 0.2);
     border-radius: 12px;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     backdrop-filter: blur(10px);
+    will-change: transform;
 }
 
 .highlight-item:hover {
@@ -159,7 +108,7 @@
 .highlight-icon {
     font-size: 2rem;
     flex-shrink: 0;
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
 }
 
 .highlight-item:hover .highlight-icon {
@@ -185,15 +134,17 @@
     border-radius: 24px;
     padding: 2rem;
     backdrop-filter: blur(20px);
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
     text-align: center;
     width: 100%;
     max-width: 450px;
     margin: 0 auto;
+    transform: translate3d(0,0,0);
+    will-change: transform;
 }
 
 .profile-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-10px) perspective(1000px) rotateX(0) rotateY(0);
     box-shadow: 0 25px 80px rgba(59, 130, 246, 0.2);
 }
 
@@ -206,7 +157,7 @@
     z-index: -1;
     opacity: 0;
     animation: gradientRotate 4s linear infinite;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.2s ease;
 }
 
 .profile-card:hover .card-glow {
@@ -226,7 +177,7 @@
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid rgba(59, 130, 246, 0.3);
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .profile-card:hover .profile-image {
@@ -242,7 +193,7 @@
     animation: gradientRotate 4s linear infinite;
     z-index: -1;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.2s ease;
 }
 
 .profile-card:hover .image-border {
@@ -291,7 +242,7 @@
     width: 100%;
     border-radius: 12px;
     overflow: hidden;
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
 }
 
 .github-stat-card:hover {
@@ -302,6 +253,15 @@
     width: 100%;
     height: auto;
     border-radius: 12px;
+    transition: opacity 0.2s ease;
+}
+
+.github-stat-card img[data-src] {
+    opacity: 0;
+}
+
+.github-stat-card img:not([data-src]) {
+    opacity: 1;
 }
 
 .timeline {
@@ -309,6 +269,7 @@
     max-width: 800px;
     margin: 0 auto;
     padding-left: 1rem;
+    contain: layout paint style;
 }
 
 .timeline::before {
@@ -326,6 +287,7 @@
     position: relative;
     margin-bottom: 2.5rem;
     padding-left: 2rem;
+    will-change: transform;
 }
 
 .timeline-marker {
@@ -337,8 +299,9 @@
     background: #3b82f6;
     border: 3px solid #1e293b;
     border-radius: 50%;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     transform: translateX(-50%);
+    will-change: transform;
 }
 
 .timeline-item:hover .timeline-marker {
@@ -352,7 +315,7 @@
     border: 1px solid rgba(59, 130, 246, 0.2);
     border-radius: 12px;
     padding: 1.5rem;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .timeline-item:hover .timeline-content {
@@ -396,12 +359,14 @@
     border-radius: 16px;
     padding: 1.5rem;
     backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    transform: translate3d(0,0,0);
+    will-change: transform;
 }
 
 .skill-category:hover {
     border-color: rgba(59, 130, 246, 0.4);
-    transform: translateY(-5px);
+    transform: translateY(-5px) perspective(1000px) rotateX(0) rotateY(0);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
 }
 
@@ -436,7 +401,7 @@
     font-size: 0.875rem;
     font-weight: 500;
     border: 1px solid rgba(59, 130, 246, 0.2);
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .tech-tag:hover {
@@ -454,6 +419,7 @@
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
+    will-change: transform, opacity;
 }
 
 .soft-skills-title {
@@ -478,7 +444,7 @@
     background: rgba(59, 130, 246, 0.05);
     border: 1px solid rgba(59, 130, 246, 0.1);
     border-radius: 10px;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     font-weight: 500;
     color: #e2e8f0;
 }
@@ -497,6 +463,7 @@
 .philosophy-section {
     background: rgba(15, 23, 42, 0.5);
     padding: 3rem 0;
+    contain: layout paint style;
 }
 
 .philosophy-title {
@@ -522,9 +489,10 @@
     border: 1px solid rgba(59, 130, 246, 0.2);
     border-radius: 20px;
     backdrop-filter: blur(15px);
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    will-change: transform;
 }
 
 .philosophy-item::before {
@@ -535,7 +503,7 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
-    transition: left 0.5s ease;
+    transition: left 0.4s ease;
 }
 
 .philosophy-item:hover::before {
@@ -551,7 +519,8 @@
 .philosophy-icon {
     font-size: 3rem;
     margin-bottom: 1.5rem;
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
+    will-change: transform;
 }
 
 .philosophy-item:hover .philosophy-icon {
@@ -568,11 +537,6 @@
 .philosophy-item p {
     color: #94a3b8;
     line-height: 1.6;
-}
-
-.cta-section .cta-background {
-    position: absolute;
-    inset: 0;
 }
 
 .cta-title {
@@ -602,6 +566,243 @@
     gap: 1.5rem;
     justify-content: center;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 10;
+}
+
+.fyuxera-section {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    position: relative;
+    overflow: hidden;
+    contain: layout paint style;
+}
+
+.fyuxera-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+    animation: backgroundPulse 10s ease-in-out infinite;
+}
+
+.fyuxera-content {
+    position: relative;
+    z-index: 10;
+}
+
+.fyuxera-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+}
+
+.fyuxera-logo-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 2px solid rgba(59, 130, 246, 0.3);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.fyuxera-logo-container:hover {
+    transform: translateY(-5px) rotateY(10deg);
+    border-color: rgba(59, 130, 246, 0.6);
+    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+}
+
+.fyuxera-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    transition: transform 0.2s ease;
+    filter: drop-shadow(0 4px 12px rgba(59, 130, 246, 0.3));
+}
+
+.fyuxera-logo-container:hover .fyuxera-logo {
+    transform: scale(1.1);
+}
+
+.logo-glow {
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, #3b82f6, #8b5cf6, #06b6d4, #3b82f6);
+    background-size: 300% 300%;
+    border-radius: 20px;
+    z-index: -1;
+    opacity: 0;
+    animation: gradientRotate 4s linear infinite;
+    transition: opacity 0.2s ease;
+}
+
+.fyuxera-logo-container:hover .logo-glow {
+    opacity: 1;
+}
+
+.fyuxera-intro {
+    min-width: 0;
+}
+
+.fyuxera-title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.company-name {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+}
+
+.company-tagline {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: #94a3b8;
+    font-weight: 500;
+    font-style: italic;
+}
+
+.fyuxera-description {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #e2e8f0;
+    max-width: none;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.service-card {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    backdrop-filter: blur(15px);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    will-change: transform;
+}
+
+.service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.service-card:hover::before {
+    left: 100%;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 0 20px 60px rgba(59, 130, 246, 0.15);
+}
+
+.service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+    transition: transform 0.2s ease;
+}
+
+.service-card:hover .service-icon {
+    transform: scale(1.2) rotateY(10deg);
+}
+
+.service-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.service-card p {
+    color: #94a3b8;
+    line-height: 1.6;
+}
+
+.fyuxera-mission {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 20px;
+    padding: 2.5rem;
+    backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+}
+
+.fyuxera-mission::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #8b5cf6, #3b82f6, #06b6d4, #8b5cf6);
+    background-size: 300% 300%;
+    border-radius: 20px;
+    z-index: -1;
+    animation: gradientRotate 6s linear infinite;
+    opacity: 0.7;
+}
+
+.mission-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.mission-content h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffffff, #e2e8f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.mission-content p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #cbd5e1;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 @keyframes particleFloat {
@@ -619,6 +820,20 @@
 @keyframes gradientRotate {
     0% { background-position: 0% 50%; }
     100% { background-position: 100% 50%; }
+}
+
+@keyframes backgroundPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }
 
 @media (max-width: 1024px) {
@@ -652,9 +867,9 @@
 
 @media (max-width: 768px) {
     .about-hero {
-        min-height: 40vh;
-        padding-top: 6rem;
-        padding-bottom: 4rem;
+        min-height: 15vh; 
+        padding-top: 2.5rem; 
+        padding-bottom: 2rem; 
     }
     
     .timeline {
@@ -686,9 +901,55 @@
         grid-template-columns: 1fr;
         max-width: 500px;
     }
+
+    
+    .fyuxera-header {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+    
+    .fyuxera-logo-container {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+    }
+    
+    .fyuxera-logo {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .services-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .service-card {
+        padding: 1.5rem;
+    }
+    
+    .fyuxera-mission {
+        padding: 2rem 1.5rem;
+    }
+    
+    .company-name {
+        font-size: clamp(1.75rem, 6vw, 2.5rem);
+    }
+    
+    .company-tagline {
+        font-size: clamp(0.9rem, 3vw, 1.1rem);
+    }
 }
 
 @media (max-width: 480px) {
+    .about-hero {
+        min-height: 12vh; 
+        padding-top: 2rem;
+        padding-bottom: 1rem;
+    }
+    
     .profile-card {
         padding: 1.5rem;
     }
@@ -719,4 +980,49 @@
     .soft-skills-grid {
         grid-template-columns: 1fr;
     }
+
+    
+    .fyuxera-header {
+        padding: 1rem;
+        gap: 1rem;
+    }
+    
+    .fyuxera-logo-container {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .fyuxera-logo {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .services-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+    
+    .service-card {
+        padding: 1.25rem;
+    }
+    
+    .service-icon {
+        font-size: 2rem;
+    }
+    
+    .fyuxera-mission {
+        padding: 1.5rem 1rem;
+    }
+    
+    .mission-content h3 {
+        font-size: 1.25rem;
+    }
+    
+    .mission-content p {
+        font-size: 0.9rem;
+    }
+}
+
+.btn, .btn-primary, .btn-secondary {
+    pointer-events: auto; 
 }

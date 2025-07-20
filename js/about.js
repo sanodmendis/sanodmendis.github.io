@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
+    let lastScrollTime = 0;
+    const scrollThrottle = 100;
+    let scrollTimeout;
+    let ticking = false;
+
     const anchorLinks = document.querySelectorAll('a[href^="#"]');
     anchorLinks.forEach(link => {
         link.addEventListener('click', function(e) {
@@ -14,7 +19,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    let ticking = false;
+    function optimizedScrollHandler() {
+        const now = Date.now();
+        if (now - lastScrollTime >= scrollThrottle) {
+            requestParallaxUpdate();
+            lastScrollTime = now;
+        }
+
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            cleanupAfterScroll();
+        }, 300);
+    }
+
+    function cleanupAfterScroll() {
+        document.querySelectorAll('.hero-content, .floating-particles, .geometric-bg .shape').forEach(el => {
+            el.style.willChange = 'auto';
+        });
+    }
+
+    window.addEventListener('scroll', optimizedScrollHandler);
 
     function updateAboutHeroScrollEffects() {
         const scrolled = window.pageYOffset;
@@ -25,34 +49,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const heroRect = aboutHero.getBoundingClientRect();
         const heroHeight = aboutHero.offsetHeight;
-        const scrollProgress = Math.min(Math.max(scrolled / (heroHeight * 0.8), 0), 1);
+
+        const scrollDistance = Math.max(heroHeight + windowHeight * 0.3, 400); 
+        const scrollProgress = Math.min(Math.max(scrolled / scrollDistance, 0), 1);
+
+        const easeOutQuart = 1 - Math.pow(1 - scrollProgress, 4);
 
         const heroContent = document.querySelector('.about-hero .hero-content');
         if (heroContent) {
-            const translateY = scrollProgress * -50;
-            const opacity = 1 - (scrollProgress * 0.6);
-            const scale = 1 - (scrollProgress * 0.05);
+            const translateY = easeOutQuart * -30; 
+            const opacity = 1 - (easeOutQuart * 0.4); 
+            const scale = 1 - (easeOutQuart * 0.03); 
+
             heroContent.style.transform = `translateY(${translateY}px) scale(${scale})`;
-            heroContent.style.opacity = Math.max(opacity, 0.3);
+            heroContent.style.opacity = Math.max(opacity, 0.5); 
         }
 
         const floatingParticles = document.querySelector('.floating-particles');
         if (floatingParticles) {
-            const translateY = scrollProgress * 30;
-            const opacity = 1 - (scrollProgress * 0.4);
+            const translateY = easeOutQuart * 20; 
+            const opacity = 1 - (easeOutQuart * 0.3); 
             floatingParticles.style.transform = `translateY(${translateY}px)`;
-            floatingParticles.style.opacity = Math.max(opacity, 0.5);
+            floatingParticles.style.opacity = Math.max(opacity, 0.6); 
         }
 
         const geometricShapes = document.querySelectorAll('.geometric-bg .shape');
         geometricShapes.forEach((shape, index) => {
-            const speed = 0.3 + (index * 0.1);
+            const speed = 0.2 + (index * 0.05); 
             const direction = index % 2 === 0 ? 1 : -1;
-            const translateY = scrolled * speed * 0.15;
-            const rotate = scrolled * 0.05 * direction;
-            const opacity = 1 - (scrollProgress * 0.5);
+            const translateY = scrolled * speed * 0.1; 
+            const rotate = scrolled * 0.03 * direction; 
+            const opacity = 1 - (easeOutQuart * 0.3); 
             shape.style.transform = `translateY(${translateY}px) rotate(${rotate}deg)`;
-            shape.style.opacity = Math.max(opacity, 0.2);
+            shape.style.opacity = Math.max(opacity, 0.4); 
         });
     }
 
@@ -85,8 +114,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    window.addEventListener('scroll', requestParallaxUpdate);
-
     const heroObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             const hero = entry.target;
@@ -106,38 +133,38 @@ document.addEventListener('DOMContentLoaded', function() {
         heroObserver.observe(aboutHeroSection);
     }
 
-const observerOptions = {
-    threshold: [0, 0.1, 0.3, 0.5],
-    rootMargin: '-50px 0px -50px 0px'
-};
+    const observerOptions = {
+        threshold: [0, 0.1, 0.3, 0.5],
+        rootMargin: '-50px 0px -50px 0px'
+    };
 
-const fadeInObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const element = entry.target;
-            const delay = element.dataset.delay || 0;
+    const fadeInObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const element = entry.target;
+                const delay = element.dataset.delay || 0;
 
-            setTimeout(() => {
-                element.classList.add('fade-in-active');
-                element.style.opacity = '1';
-                element.style.transform = 'translateY(0) scale(1)';
-                element.style.filter = 'blur(0)';
-            }, delay);
-        }
+                setTimeout(() => {
+                    element.classList.add('fade-in-active');
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0) scale(1)';
+                    element.style.filter = 'blur(0)';
+                }, delay);
+            }
+        });
+    }, observerOptions);
+
+    const fadeElements = document.querySelectorAll('.skill-category, .timeline-item, .philosophy-item, .highlight-item, .profile-card, .soft-skills-section');
+    fadeElements.forEach((el, index) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(40px) scale(0.95)';
+        el.style.filter = 'blur(5px)';
+        el.style.transition = 'opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.3s ease';
+        el.dataset.delay = index * 50; 
+        fadeInObserver.observe(el);
     });
-}, observerOptions);
 
-const fadeElements = document.querySelectorAll('.skill-category, .timeline-item, .philosophy-item, .highlight-item, .profile-card, .soft-skills-section');
-fadeElements.forEach((el, index) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(40px) scale(0.95)';
-    el.style.filter = 'blur(5px)';
-    el.style.transition = 'opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.4s ease';
-    el.dataset.delay = index * 50;
-    fadeInObserver.observe(el);
-});
-
-    function animateCounter(element, target, duration = 2500) {
+    function animateCounter(element, target, duration = 1500) {
         let start = 0;
         const startTime = performance.now();
 
@@ -172,7 +199,7 @@ fadeElements.forEach((el, index) => {
 
                     setTimeout(() => {
                         animateCounter(statNumber, number);
-                    }, 300);
+                    }, 200);
                 }
             }
         });
@@ -256,7 +283,7 @@ fadeElements.forEach((el, index) => {
                     const width = skillProgress.getAttribute('data-width');
                     setTimeout(() => {
                         skillProgress.style.width = width;
-                    }, 300);
+                    }, 200);
                 }
             }
         });
@@ -278,7 +305,7 @@ fadeElements.forEach((el, index) => {
             height: 3px;
             background: linear-gradient(90deg, #3b82f6, #8b5cf6);
             z-index: 1000;
-            transition: width 0.3s ease;
+            transition: width 0.2s ease;
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
         `;
         document.body.appendChild(progressBar);
@@ -355,44 +382,39 @@ fadeElements.forEach((el, index) => {
     }, { threshold: 0.1 });
 
     sections.forEach(section => {
-        section.style.transition = 'opacity 1s ease, transform 1s ease';
+        section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
         sectionObserver.observe(section);
     });
 
-    function preloadImages() {
-        const images = document.querySelectorAll('img[data-src]');
-        images.forEach(img => {
-            img.src = img.dataset.src;
-            img.removeAttribute('data-src');
+    const lazyLoadObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                if (img.dataset.src) {
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                    img.style.opacity = '1';
+                    img.style.transition = 'opacity 0.3s ease';
+                }
+                lazyLoadObserver.unobserve(img);
+            }
         });
-    }
+    }, {rootMargin: '200px'});
 
-    preloadImages();
+    document.querySelectorAll('img[data-src]').forEach(img => {
+        lazyLoadObserver.observe(img);
+    });
 
-    let konamiCode = [];
-    const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
-
-    document.addEventListener('keydown', function(e) {
-        konamiCode.push(e.keyCode);
-        if (konamiCode.length > konami.length) {
-            konamiCode.shift();
-        }
-
-        if (konamiCode.join(',') === konami.join(',')) {
-            document.body.style.animation = 'rainbow 2s ease-in-out';
-            setTimeout(() => {
-                document.body.style.animation = '';
-            }, 2000);
-        }
+    window.addEventListener('beforeunload', () => {
+        window.removeEventListener('scroll', optimizedScrollHandler);
+        document.querySelectorAll('.skill-category, .timeline-item, .philosophy-item, .profile-card').forEach(el => {
+            el.style.transition = 'none';
+            el.style.transform = 'none';
+        });
     });
 
     const style = document.createElement('style');
     style.textContent = `
-        @keyframes rainbow {
-            0%, 100% { filter: hue-rotate(0deg); }
-            50% { filter: hue-rotate(360deg); }
-        }
-
         .scroll-progress {
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
         }
@@ -409,9 +431,9 @@ fadeElements.forEach((el, index) => {
         }
 
         .hero-active .hero-content {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                        opacity 0.3s ease,
-                        filter 0.3s ease;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                        opacity 0.2s ease,
+                        filter 0.2s ease;
         }
 
         .hero-content {
@@ -434,18 +456,18 @@ fadeElements.forEach((el, index) => {
         .philosophy-item,
         .profile-card {
             will-change: transform;
-            transition: transform 0.3s ease;
+            transition: transform 0.2s ease;
         }
 
         .skill-progress {
-            transition: width 2s ease-out;
+            transition: width 1s ease-out;
         }
 
         @media (max-width: 768px) {
             .hero-content,
             .floating-particles,
             .geometric-bg .shape {
-                transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+                transition: transform 0.15s ease-out, opacity 0.15s ease-out;
             }
         }
     `;
