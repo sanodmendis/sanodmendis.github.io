@@ -1,5 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
 
+    const glassCards = document.querySelectorAll('.glass-card');
+    const contactItems = document.querySelectorAll('.contact-item');
+    const socialLinks = document.querySelectorAll('.social-link');
+    const fadeElements = document.querySelectorAll('.glass-card, .contact-item, .social-link');
+
     function createScrollProgress() {
         const progressBar = document.createElement('div');
         progressBar.className = 'scroll-progress';
@@ -11,38 +16,25 @@ document.addEventListener('DOMContentLoaded', function() {
             height: 3px;
             background: linear-gradient(90deg, #3b82f6, #8b5cf6);
             z-index: 1000;
-            transition: width 0.3s ease;
+            will-change: width;
         `;
         document.body.appendChild(progressBar);
 
+        let ticking = false;
         window.addEventListener('scroll', () => {
-            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollProgress = (window.scrollY / scrollHeight) * 100;
-            progressBar.style.width = scrollProgress + '%';
-        });
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    const scrollProgress = (window.scrollY / scrollHeight) * 100;
+                    progressBar.style.width = scrollProgress + '%';
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
     }
 
     createScrollProgress();
-
-    const magneticButtons = document.querySelectorAll('.btn-magnetic');
-    magneticButtons.forEach(btn => {
-        btn.addEventListener('mousemove', function(e) {
-            const rect = this.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-
-            this.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
-        });
-
-        btn.addEventListener('mouseleave', function() {
-            this.style.transform = 'translate(0, 0)';
-        });
-    });
-
-    const observerOptions = {
-        threshold: [0, 0.1, 0.3, 0.5],
-        rootMargin: '-50px 0px -50px 0px'
-    };
 
     const fadeInObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -53,56 +45,79 @@ document.addEventListener('DOMContentLoaded', function() {
                 setTimeout(() => {
                     element.classList.add('fade-in-active');
                     element.style.opacity = '1';
-                    element.style.transform = 'translateY(0) scale(1)';
+                    element.style.transform = 'translate3d(0, 0, 0) scale(1)';
                     element.style.filter = 'blur(0)';
+                    element.style.willChange = ''; 
                 }, delay);
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.1 });
 
-    const fadeElements = document.querySelectorAll('.glass-card, .contact-item, .social-link');
     fadeElements.forEach((el, index) => {
         el.style.opacity = '0';
-        el.style.transform = 'translateY(40px) scale(0.95)';
+        el.style.transform = 'translate3d(0, 40px, 0) scale(0.95)';
         el.style.filter = 'blur(5px)';
-        el.style.transition = 'opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.8s ease';
+        el.style.willChange = 'opacity, transform, filter';
         el.dataset.delay = index * 100;
         fadeInObserver.observe(el);
     });
 
-    const glassCards = document.querySelectorAll('.glass-card');
     glassCards.forEach((card, index) => {
-        card.addEventListener('mousemove', function(e) {
-            const rect = this.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = (y - centerY) / 10;
-            const rotateY = (centerX - x) / 10;
+        let lastTime = 0;
+        const throttleDelay = 16;
 
-            this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px) scale(1.02)`;
-        });
+        card.addEventListener('mousemove', function(e) {
+            const now = Date.now();
+            if (now - lastTime >= throttleDelay) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+
+                this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translate3d(0, -10px, 0) scale(1.02)`;
+                lastTime = now;
+            }
+        }, { passive: true });
 
         card.addEventListener('mouseleave', function() {
-            this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)';
+            this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translate3d(0, 0, 0) scale(1)';
         });
     });
 
-    const contactItems = document.querySelectorAll('.contact-item');
     contactItems.forEach(item => {
+        const type = item.querySelector('.contact-icon i').className.split(' ')[1];
+        let color;
+
+        switch(type) {
+            case 'fa-phone':
+                color = 'var(--phone-color)';
+                break;
+            case 'fa-envelope':
+                color = 'var(--email-color)';
+                break;
+            case 'fa-envelope-open':
+                color = 'var(--alt-email-color)';
+                break;
+            default:
+                color = 'rgba(59, 130, 246, 0.4)';
+        }
+
         item.addEventListener('mouseenter', function() {
             this.style.background = 'rgba(30, 41, 59, 0.5)';
-            this.style.borderColor = 'rgba(59, 130, 246, 0.3)';
+            this.style.borderColor = color;
+            this.querySelector('.contact-icon').style.background = color;
         });
 
         item.addEventListener('mouseleave', function() {
             this.style.background = 'rgba(30, 41, 59, 0.3)';
             this.style.borderColor = 'rgba(59, 130, 246, 0.1)';
+            this.querySelector('.contact-icon').style.background = 'linear-gradient(135deg, #3b82f6, #8b5cf6)';
         });
     });
 
-    const socialLinks = document.querySelectorAll('.social-link');
     socialLinks.forEach(link => {
         link.addEventListener('mouseenter', function() {
             const platform = this.getAttribute('data-platform');

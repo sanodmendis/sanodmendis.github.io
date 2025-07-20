@@ -1,9 +1,24 @@
+:root {
+    --whatsapp-color: #25D366;
+    --telegram-color: #0088CC;
+    --linkedin-color: #0077B5;
+    --github-color: #333;
+    --facebook-color: #1877F2;
+    --twitter-color: #1DA1F2;
+    --instagram-color: #E4405F;
+    --fiverr-color: #1DBF73;
+    --phone-color: #4CAF50;
+    --email-color: #EA4335;
+    --alt-email-color: #FBBC05;
+}
+
 .contact-hero {
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
     position: relative;
     overflow: hidden;
     padding: 120px 0 80px;
     text-align: center;
+    contain: layout paint;
 }
 
 .contact-hero::before {
@@ -36,6 +51,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+    will-change: background, text-shadow;
 }
 
 .hero-description {
@@ -59,12 +75,14 @@
 .rocket-emoji {
     font-size: 1.5rem;
     animation: bounce 2s infinite;
+    will-change: transform;
 }
 
 .contact-section {
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     position: relative;
     padding: 4rem 0;
+    contain: layout;
 }
 
 .contact-grid {
@@ -76,13 +94,16 @@
 
 .glass-card {
     background: rgba(15, 23, 42, 0.4);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(59, 130, 246, 0.2);
     border-radius: 20px;
     padding: 3rem;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
     position: relative;
     overflow: hidden;
+    will-change: transform;
+    transform-style: preserve-3d;
+    contain: content;
 }
 
 .glass-card::before {
@@ -128,12 +149,20 @@
     background: rgba(30, 41, 59, 0.3);
     border-radius: 12px;
     border: 1px solid rgba(59, 130, 246, 0.1);
+    text-decoration: none;
+    will-change: background, border-color;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.contact-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .contact-icon {
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -141,6 +170,16 @@
     font-size: 1.25rem;
     color: white;
     flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
 }
 
 .contact-details h3 {
@@ -150,10 +189,11 @@
     margin-bottom: 0.25rem;
 }
 
-.contact-details a {
-    color: #94a3b8;
+.contact-link {
+    color: #ffffff !important;
     text-decoration: none;
     font-size: 0.95rem;
+    transition: color 0.3s ease;
 }
 
 .social-grid {
@@ -176,6 +216,13 @@
     color: #94a3b8;
     min-width: 100px;
     min-height: 100px;
+    will-change: background, border-color;
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .social-icon {
@@ -194,11 +241,12 @@
     position: relative;
     overflow: hidden;
     padding: 4rem 0;
+    contain: layout;
 }
 
 .cta-glass-card {
     background: rgba(15, 23, 42, 0.4);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(59, 130, 246, 0.2);
     border-radius: 20px;
     padding: 3rem;
@@ -206,6 +254,7 @@
     max-width: 800px;
     margin: 0 auto;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    contain: content;
 }
 
 .cta-title {
@@ -230,6 +279,38 @@
     gap: 1.5rem;
     justify-content: center;
     flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: white;
+}
+
+.btn-secondary {
+    background: rgba(30, 41, 59, 0.6);
+    color: #e2e8f0;
+    border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
@@ -280,5 +361,14 @@
     
     .glass-card {
         padding: 1.5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }
