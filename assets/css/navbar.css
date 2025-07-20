@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
 
 .fyuxera-navbar {
     position: fixed;
@@ -57,7 +57,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Rubik', sans-serif;
     font-weight: 500;
     font-size: 0.85rem;
     letter-spacing: -0.3px;
@@ -69,7 +69,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Rubik', sans-serif;
     font-weight: 700;
     font-size: 1.1rem;
     letter-spacing: -0.4px;
@@ -94,12 +94,12 @@
 .nav-links a {
     color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 700;
     font-size: 1rem;
     padding: 0.5rem 0;
     transition: color 0.3s ease;
     position: relative;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Rubik', sans-serif;
 }
 
 .nav-links a:hover {
@@ -108,7 +108,7 @@
 
 .nav-links a.active {
     color: #4f9cf9;
-    font-weight: 600;
+    font-weight: 700;
     position: relative;
 }
 
@@ -140,7 +140,7 @@
     border-radius: 8px;
     font-weight: 600;
     font-size: 0.9rem;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Rubik', sans-serif;
     transition: background-color 0.3s ease;
     white-space: nowrap;
 }
