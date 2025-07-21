@@ -1,7 +1,6 @@
 const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
 
 if (!isTouchDevice) {
-
     document.querySelectorAll('.skill-category').forEach((card, i, all) => {
         card.addEventListener('mousemove', e => {
             const rect = card.getBoundingClientRect();
@@ -107,13 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        document.querySelectorAll('.skill-category, .timeline-item, .philosophy-item, .profile-card').forEach(card => {
-            const rect = card.getBoundingClientRect();
-            if (rect.top < windowHeight && rect.bottom > 0) {
-                const dist = (rect.top + rect.height / 2 - windowHeight / 2) / windowHeight;
-                card.style.transform = `translateY(${dist * 15}px)`;
-            }
-        });
+        if (!isTouchDevice) {
+            document.querySelectorAll('.skill-category, .timeline-item, .philosophy-item, .profile-card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                if (rect.top < windowHeight && rect.bottom > 0) {
+                    const dist = (rect.top + rect.height / 2 - windowHeight / 2) / windowHeight;
+                    card.style.transform = `translateY(${dist * 15}px)`;
+                }
+            });
+        }
 
         ticking = false;
     }
@@ -167,63 +168,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.stat-item').forEach(el => statObserver.observe(el));
 
-    document.querySelectorAll('.skill-category').forEach((card, i, all) => {
-        card.addEventListener('mousemove', e => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            card.style.transform = `perspective(1000px) rotateX(${y / 15}deg) rotateY(${-x / 15}deg) translateY(-5px) scale(1.02)`;
-        });
+    if (!isTouchDevice) {
+        document.querySelectorAll('.skill-category').forEach((card, i, all) => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                card.style.transform = `perspective(1000px) rotateX(${y / 15}deg) rotateY(${-x / 15}deg) translateY(-5px) scale(1.02)`;
+            });
 
-        card.addEventListener('mouseenter', () => {
-            all.forEach((c, j) => {
-                if (j !== i) {
-                    c.style.opacity = '0.7';
-                    c.style.transform = 'scale(0.98)';
-                }
+            card.addEventListener('mouseenter', () => {
+                all.forEach((c, j) => {
+                    if (j !== i) {
+                        c.style.opacity = '0.7';
+                        c.style.transform = 'scale(0.98)';
+                    }
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                all.forEach(c => {
+                    c.style.opacity = '1';
+                    c.style.transform = 'scale(1)';
+                });
             });
         });
 
-        card.addEventListener('mouseleave', () => {
-            all.forEach(c => {
-                c.style.opacity = '1';
-                c.style.transform = 'scale(1)';
+        document.querySelectorAll('.timeline-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.querySelector('.timeline-marker')?.style.setProperty('transform', 'scale(1.2)');
+                item.style.zIndex = '1'; 
+            });
+            item.addEventListener('mouseleave', () => {
+                item.querySelector('.timeline-marker')?.style.setProperty('transform', 'scale(1)');
+                item.style.zIndex = '0'; 
             });
         });
-    });
 
-    document.querySelectorAll('.timeline-item').forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            item.querySelector('.timeline-marker')?.style.setProperty('transform', 'scale(1.2)');
-            item.style.zIndex = '1'; 
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('mousemove', e => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+            });
         });
-        item.addEventListener('mouseleave', () => {
-            item.querySelector('.timeline-marker')?.style.setProperty('transform', 'scale(1)');
-            item.style.zIndex = '0'; 
-        });
-    });
 
-    document.querySelectorAll('.btn').forEach(btn => {
-        btn.addEventListener('mousemove', e => {
-            const rect = btn.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            btn.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
+        document.querySelectorAll('.philosophy-item').forEach(item => {
+            const icon = item.querySelector('.philosophy-icon');
+            item.addEventListener('mouseenter', () => {
+                if (icon) icon.style.transform = 'scale(1.1) rotateY(10deg)';
+            });
+            item.addEventListener('mouseleave', () => {
+                if (icon) icon.style.transform = 'scale(1) rotateY(0)';
+            });
         });
-        btn.addEventListener('mouseleave', () => {
-            btn.style.transform = 'translate(0, 0)';
-        });
-    });
-
-    document.querySelectorAll('.philosophy-item').forEach(item => {
-        const icon = item.querySelector('.philosophy-icon');
-        item.addEventListener('mouseenter', () => {
-            if (icon) icon.style.transform = 'scale(1.1) rotateY(10deg)';
-        });
-        item.addEventListener('mouseleave', () => {
-            if (icon) icon.style.transform = 'scale(1) rotateY(0)';
-        });
-    });
+    }
 
     const sectionObserver = new IntersectionObserver(entries => {
         entries.forEach(entry => {

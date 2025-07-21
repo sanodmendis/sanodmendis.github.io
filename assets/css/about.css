@@ -1028,7 +1028,6 @@
 }
 
 @media (hover: none) and (pointer: coarse) {
-    
     .highlight-item:hover,
     .highlight-item:hover .highlight-icon,
     .skill-category:hover,
@@ -1051,9 +1050,40 @@
         filter: none !important;
     }
     
-    
     .philosophy-item::before,
     .service-card::before {
         display: none !important;
+    }
+
+    
+    .services-grid,
+    .soft-skills-section,
+    .philosophy-section,
+    .skills-grid {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .services-grid *,
+    .soft-skills-section *,
+    .philosophy-section *,
+    .skills-grid * {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .service-card,
+    .soft-skill-item,
+    .philosophy-item,
+    .skill-category {
+        transform: none !important;
+        transition: none !important;
+    }
+
+    .fade-in {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        transition: none !important;
     }
 }
