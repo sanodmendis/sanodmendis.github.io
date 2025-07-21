@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-
     const cachedElements = {
         hero: document.querySelector('.hero'),
         heroTitle: document.querySelector('.hero-title'),
@@ -341,13 +340,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
 
-        card.addEventListener('mouseleave', function() {
-            cachedElements.glassCards.forEach(otherCard => {
-                otherCard.style.opacity = '1';
-                otherCard.style.transform = 'scale(1)';
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = 'none';
+                this.style.borderColor = 'rgba(59, 130, 246, 0.2)';
             });
         });
-    });
+    }
 
     const floatingIcons = document.querySelectorAll('.floating-icon');
     floatingIcons.forEach((icon, index) => {
