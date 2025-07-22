@@ -8,7 +8,7 @@ function initializeImageSlider() {
     const dots = document.querySelectorAll('.dot');
     let currentSlide = 0;
     let autoSlideInterval;
-    const autoSlideDelay = 4000; 
+    const autoSlideDelay = 10000; 
 
     if (images.length === 0 || dots.length === 0) return;
 
