@@ -578,6 +578,25 @@
     flex-wrap: wrap;
 }
 
+.nav-brand .brand-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+}
+
+.nav-brand .brand-link:hover {
+    opacity: 0.9;
+}
+
+.nav-brand .brand-link .brand-text-container {
+    transition: transform 0.2s ease;
+}
+
+.nav-brand .brand-link:hover .brand-text-container {
+    transform: translateX(3px);
+}
+
 @keyframes parallaxFloat {
 
     0%,
