@@ -666,6 +666,10 @@
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
+
+    .experience-title {
+        text-align: center;
+    }
     
     .experience-highlight {
         flex-direction: column;
@@ -701,6 +705,10 @@
     
     .glass-card {
         padding: 2rem;
+    }
+
+    .experience-title {
+        text-align: center;
     }
     
     .experience-stats {
