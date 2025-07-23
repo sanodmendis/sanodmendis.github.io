@@ -47,7 +47,7 @@ class FyuXeraNavbar {
     }>Portfolio</a></li>
 <li><a href="./products" ${
       this.currentPage === "products" ? 'class="active"' : ""
-    }>Products</a></li>
+    }>Products & Services</a></li>
 <li><a href="./contact" ${
       this.currentPage === "contact" ? 'class="active"' : ""
     }>Contact</a></li>
