@@ -65,8 +65,11 @@
 }
 
 .desktop-back {
-    grid-column: 1;
-    justify-self: start;
+    position: absolute;
+    left: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
 }
 
 .mobile-back {
