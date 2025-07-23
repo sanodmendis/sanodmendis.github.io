@@ -42,8 +42,8 @@ class FyuXeraNavbar {
 <li><a href="./about" ${
       this.currentPage === "about" ? 'class="active"' : ""
     }>About</a></li>
-<li><a href="./ projects" ${
-      this.currentPage === " projects" ? 'class="active"' : ""
+<li><a href="./projects" ${
+      this.currentPage === "projects" ? 'class="active"' : ""
     }>Projects</a></li>
 <li><a href="./products" ${
       this.currentPage === "products" ? 'class="active"' : ""
@@ -257,7 +257,7 @@ class FyuXeraNavbar {
   }
 
   initSectionHighlight(
-    sections = ["home", " projects", "about", "products", "contact"],
+    sections = ["home", "projects", "about", "products", "contact"],
   ) {
     const observerOptions = {
       threshold: 0.6,
