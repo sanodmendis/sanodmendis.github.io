@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     initializeImageSlider();
     initializeContactButtons();
+    initializeBackButtonFunctionality();
 });
 
 function initializeImageSlider() {
@@ -108,6 +109,30 @@ function initializeImageSlider() {
             stopAutoSlide();
         } else {
             startAutoSlide();
+        }
+    });
+}
+
+function initializeContactButtons() {
+
+}
+
+function initializeBackButtonFunctionality() {
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('back-button') || e.target.closest('.back-button')) {
+            e.preventDefault();
+
+            const button = e.target.classList.contains('back-button') ? e.target : e.target.closest('.back-button');
+            const originalText = button.innerHTML;
+
+            button.innerHTML = button.innerHTML.replace('Back to Products', 'Going back...');
+            button.style.opacity = '0.7';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            setTimeout(() => {
+                window.location.href = '../products';
+            }, 500);
         }
     });
 }
