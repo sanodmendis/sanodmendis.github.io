@@ -1,0 +1,479 @@
+.project-hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    min-height: 25vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 3rem 0 2rem;
+}
+
+.project-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(79, 156, 249, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    gap: 2rem;
+}
+
+.title-container {
+    text-align: center;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(79, 156, 249, 0.3);
+    color: #e2e8f0;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+}
+
+.back-button:hover {
+    background: rgba(79, 156, 249, 0.2);
+    color: #ffffff;
+}
+
+.back-arrow {
+    font-size: 1.2rem;
+}
+
+.desktop-back {
+    position: absolute;
+    left: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+}
+
+.mobile-back {
+    display: none;
+    width: 100%;
+    justify-content: center;
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    border-radius: 12px;
+    background: rgba(30, 41, 59, 0.8);
+}
+
+.page-title {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 10;
+}
+
+.title-main {
+    color: #ffffff;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    color: #94a3b8;
+    font-weight: 500;
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+}
+
+.project-article {
+    background: #1a1d29;
+    padding: 4rem 0;
+}
+
+.article-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.project-intro {
+    margin-bottom: 4rem;
+}
+
+.intro-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #e2e8f0;
+    text-align: center;
+    font-weight: 400;
+    padding: 2rem;
+    background: rgba(30, 41, 59, 0.3);
+    border-radius: 12px;
+    border-left: 4px solid #4f9cf9;
+}
+
+.project-phase {
+    margin-bottom: 5rem;
+}
+
+.phase-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.phase-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #4f9cf9;
+    background: rgba(79, 156, 249, 0.1);
+    border: 2px solid #4f9cf9;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.phase-header h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+}
+
+.phase-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+    margin-bottom: 3rem;
+}
+
+.phase-image {
+    text-align: center;
+}
+
+.phase-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(79, 156, 249, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.image-caption {
+    display: block;
+    font-size: 0.9rem;
+    color: #94a3b8;
+    margin-top: 1rem;
+    font-style: italic;
+}
+
+.phase-text {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #e2e8f0;
+}
+
+.phase-text p {
+    margin-bottom: 1.5rem;
+}
+
+.features-list {
+    background: rgba(30, 41, 59, 0.4);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 2rem 0;
+}
+
+.features-list h4 {
+    color: #4f9cf9;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.features-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.features-list li {
+    padding: 0.5rem 0;
+    position: relative;
+    padding-left: 1.5rem;
+    color: #e2e8f0;
+}
+
+.features-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #4f9cf9;
+    font-weight: bold;
+}
+
+.phase-gallery {
+    margin-top: 3rem;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.gallery-item {
+    text-align: center;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid rgba(79, 156, 249, 0.2);
+}
+
+.gallery-item.mobile-app {
+    max-width: 200px;
+    margin: 0 auto;
+}
+
+.gallery-item.mobile-app img {
+    border-radius: 16px;
+}
+
+.dashboard-section {
+    margin-top: 3rem;
+}
+
+.dashboard-section h4 {
+    color: #ffffff;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.dashboard-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.project-conclusion {
+    margin-bottom: 4rem;
+    padding: 2.5rem;
+    background: rgba(30, 41, 59, 0.3);
+    border-radius: 12px;
+    border: 1px solid rgba(79, 156, 249, 0.2);
+}
+
+.conclusion-header h2 {
+    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.conclusion-content p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #e2e8f0;
+    text-align: center;
+}
+
+.tech-stack {
+    text-align: center;
+    padding: 2rem;
+}
+
+.tech-stack h3 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.tech-tag {
+    background: rgba(79, 156, 249, 0.2);
+    color: #4f9cf9;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid rgba(79, 156, 249, 0.3);
+}
+
+@media (max-width: 1024px) {
+    .phase-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .phase-image {
+        order: 1;
+    }
+    
+    .phase-text {
+        order: 2;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    
+    .dashboard-gallery {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .project-hero {
+        min-height: 20vh;
+        padding: 2rem 0 1.5rem;
+    }
+    
+    .hero-content {
+        padding: 0 1rem;
+    }
+    
+    .desktop-back {
+        display: none;
+    }
+    
+    .mobile-back {
+        display: inline-flex;
+        position: static;
+        transform: none;
+    }
+    
+    .article-content {
+        padding: 0 1rem;
+    }
+    
+    .phase-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .phase-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .phase-number {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+    
+    .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .intro-text {
+        font-size: 1.1rem;
+        padding: 1.5rem;
+    }
+    
+    .phase-text {
+        font-size: 1rem;
+    }
+    
+    .project-conclusion {
+        padding: 2rem 1.5rem;
+    }
+    
+    .tech-tags {
+        gap: 0.5rem;
+    }
+    
+    .tech-tag {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .project-hero {
+        min-height: 15vh;
+        padding: 1.5rem 0;
+    }
+    
+    .hero-content {
+        padding: 0 0.5rem;
+    }
+    
+    .article-content {
+        padding: 0 0.5rem;
+    }
+    
+    .intro-text {
+        font-size: 1rem;
+        padding: 1rem;
+    }
+    
+    .phase-content {
+        gap: 1.5rem;
+    }
+    
+    .features-list {
+        padding: 1rem;
+    }
+    
+    .project-conclusion {
+        padding: 1.5rem 1rem;
+    }
+    
+    .conclusion-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .conclusion-content p {
+        font-size: 1rem;
+    }
+    
+    .back-button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    
+    .mobile-back {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.95rem;
+    }
+}
