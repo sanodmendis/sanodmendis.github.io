@@ -27,7 +27,7 @@ class FyuXeraNavbar {
                 <div class="nav-container">
                 <div class="nav-brand">
                     <img src="../assets/images/logo.png" alt="FyuXera Logo" class="brand-logo">
-                    <a href="./" class="brand-link">
+                    <a href="../" class="brand-link">
                         <div class="brand-text-container">
                             <span class="brand-text-small">FyuXera</span>
                             <span class="brand-text-main">Sanod D. Mendis</span>
@@ -42,9 +42,9 @@ class FyuXeraNavbar {
 <li><a href="../about" ${
       this.currentPage === "about" ? 'class="active"' : ""
     }>About</a></li>
-<li><a href="../portfolio" ${
-      this.currentPage === "portfolio" ? 'class="active"' : ""
-    }>Portfolio</a></li>
+<li><a href="../ projects" ${
+      this.currentPage === " projects" ? 'class="active"' : ""
+    }>Projects</a></li>
 <li><a href="../products" ${
       this.currentPage === "products" ? 'class="active"' : ""
     }>Products & Services</a></li>
@@ -258,7 +258,7 @@ class FyuXeraNavbar {
   }
 
   initSectionHighlight(
-    sections = ["home", "portfolio", "about", "products", "contact"],
+    sections = ["home", " projects", "about", "products", "contact"],
   ) {
     const observerOptions = {
       threshold: 0.6,
