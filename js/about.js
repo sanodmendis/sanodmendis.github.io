@@ -150,23 +150,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { rootMargin: '50px', threshold: 0.1 }).observe(hero);
     }
 
-    const statObserver = new IntersectionObserver(entries => {
+    function animateCounter(element, target, duration = 2500) {
+        let start = 0;
+        const startTime = performance.now();
+
+        function updateCounter(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const current = Math.floor(start + (target - start) * easeOutQuart);
+
+            const originalText = element.getAttribute('data-original') || element.textContent;
+            const suffix = originalText.includes('+') ? '+' : originalText.includes('%') ? '%' : '';
+            element.textContent = current + suffix;
+
+            if (progress < 1) {
+                requestAnimationFrame(updateCounter);
+            }
+        }
+
+        requestAnimationFrame(updateCounter);
+    }
+
+    const statsObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            const stat = entry.target.querySelector('.stat-number');
-            if (entry.isIntersecting && stat && !stat.dataset.animated) {
-                stat.dataset.animated = 'true';
-                const target = parseInt(stat.textContent.replace(/\D/g, ''));
-                const start = performance.now();
-                requestAnimationFrame(function animate(t) {
-                    const progress = Math.min((t - start) / 1500, 1);
-                    stat.textContent = Math.floor(target * (1 - Math.pow(1 - progress, 4)));
-                    if (progress < 1) requestAnimationFrame(animate);
-                });
+            if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
+                const statNumber = entry.target.querySelector('.stat-number');
+                if (statNumber && !statNumber.hasAttribute('data-animated')) {
+                    statNumber.setAttribute('data-animated', 'true');
+                    const text = statNumber.textContent;
+                    statNumber.setAttribute('data-original', text);
+                    const number = parseInt(text.match(/\d+/)[0]);
+                    statNumber.textContent = '0' + text.replace(/\d+/, '');
+
+                    setTimeout(() => {
+                        animateCounter(statNumber, number);
+                    }, 300);
+                }
             }
         });
     }, { threshold: 0.3 });
 
-    document.querySelectorAll('.stat-item').forEach(el => statObserver.observe(el));
+    const statItems = document.querySelectorAll('.stat-item');
+    statItems.forEach(item => {
+        statsObserver.observe(item);
+    });
 
     if (!isTouchDevice) {
         document.querySelectorAll('.skill-category').forEach((card, i, all) => {

@@ -199,10 +199,6 @@
     line-height: 1.2;
 }
 
-.stat-number::after {
-    content: '+';
-}
-
 .stat-label {
     font-size: 0.85rem;
     color: #64748b;
