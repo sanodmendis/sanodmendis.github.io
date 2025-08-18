@@ -30,6 +30,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function isInViewport(element) {
+        const rect = element.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    }
+
     cachedElements.anchorLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -136,26 +146,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const distance = (cardCenter - viewportCenter) / viewportHeight;
             const parallaxOffset = distance * 20;
 
-
             if (rect.top < viewportHeight && rect.bottom > 0) {
                 card.style.transform = `translateY(${parallaxOffset}px)`;
             }
         });
 
-
         ticking = false;
     }
-
-
-    function requestParallaxUpdate() {
-        if (!ticking) {
-            requestAnimationFrame(updateParallax);
-            ticking = true;
-        }
-    }
-
-
-    window.addEventListener('scroll', requestParallaxUpdate);
 
     const heroObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -209,7 +206,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const element = entry.target;
                 const delay = element.dataset.delay || 0;
 
-
                 setTimeout(() => {
                     element.classList.add('fade-in-active');
                     element.style.opacity = '1';
@@ -225,13 +221,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const text = subtitle.textContent;
         subtitle.innerHTML = '<span class="typing-text"></span><span class="cursor">|</span>';
 
-
         const typingText = subtitle.querySelector('.typing-text');
         const cursor = subtitle.querySelector('.cursor');
 
-
         cursor.style.animation = 'blink 1s infinite';
-
 
         let i = 0;
         function typeWriter() {
@@ -239,11 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 typingText.textContent += text.charAt(i);
                 i++;
                 setTimeout(typeWriter, 80 + Math.random() * 40);
-                setTimeout(typeWriter, 80 + Math.random() * 40); 
-                setTimeout(typeWriter, 80 + Math.random() * 40); 
             } else {
-
-
                 setTimeout(() => {
                     cursor.style.opacity = '0';
                 }, 2000);
@@ -257,26 +246,21 @@ document.addEventListener('DOMContentLoaded', function() {
         let start = 0;
         const startTime = performance.now();
 
-
         function updateCounter(currentTime) {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
 
-
             const easeOutQuart = 1 - Math.pow(1 - progress, 4);
             const current = Math.floor(start + (target - start) * easeOutQuart);
-
 
             const originalText = element.getAttribute('data-original') || element.textContent;
             const suffix = originalText.includes('+') ? '+' : originalText.includes('%') ? '%' : '';
             element.textContent = current + suffix;
 
-
             if (progress < 1) {
                 requestAnimationFrame(updateCounter);
             }
         }
-
 
         requestAnimationFrame(updateCounter);
     }
@@ -291,7 +275,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     statNumber.setAttribute('data-original', text);
                     const number = parseInt(text.match(/\d+/)[0]);
                     statNumber.textContent = '0' + text.replace(/\d+/, '');
-
 
                     setTimeout(() => {
                         animateCounter(statNumber, number);
@@ -308,8 +291,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const glassCards = document.querySelectorAll('.glass-card');
     glassCards.forEach((card, index) => {
-
-
         card.addEventListener('mousemove', function(e) {
             if (!isInViewport(card)) return;
 
@@ -321,14 +302,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const rotateX = (y - centerY) / 10;
             const rotateY = (centerX - x) / 10;
 
-
             this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px) scale(1.02)`;
         });
 
         card.addEventListener('mouseleave', function() {
             this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)';
         });
-
 
         card.addEventListener('mouseenter', function() {
             cachedElements.glassCards.forEach((otherCard, otherIndex) => {
@@ -339,23 +318,19 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-                this.style.boxShadow = 'none';
-                this.style.borderColor = 'rgba(59, 130, 246, 0.2)';
+        card.addEventListener('mouseleave', function() {
+            cachedElements.glassCards.forEach((otherCard) => {
+                otherCard.style.opacity = '1';
+                otherCard.style.transform = 'scale(1)';
             });
         });
-    }
+    });
 
     const floatingIcons = document.querySelectorAll('.floating-icon');
     floatingIcons.forEach((icon, index) => {
-
-
         const randomDelay = Math.random() * 2;
         const randomDuration = 3 + Math.random() * 2;
         const randomAmplitude = 15 + Math.random() * 10;
-
 
         icon.style.animationDelay = randomDelay + 's';
         icon.style.animationDuration = randomDuration + 's';
@@ -377,14 +352,12 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         document.body.appendChild(progressBar);
 
-
         window.addEventListener('scroll', () => {
             const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
             const scrollProgress = (window.scrollY / scrollHeight) * 100;
             progressBar.style.width = scrollProgress + '%';
         }, { passive: true });
     }
-
 
     createScrollProgress();
 
@@ -395,10 +368,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
 
-
             this.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
         });
-
 
         btn.addEventListener('mouseleave', function() {
             this.style.transform = 'translate(0, 0)';
@@ -407,8 +378,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const codeEditor = document.querySelector('.code-editor');
     if (codeEditor) {
-
-
         const codeObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -418,9 +387,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }, { threshold: 0.3 });
 
-
         codeObserver.observe(codeEditor);
-
 
         codeEditor.addEventListener('mouseenter', function() {
             this.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.4), 0 0 25px rgba(59, 130, 246, 0.25)';
@@ -452,9 +419,6 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', () => {
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
-
-        }, 16); 
-
         }, 16);
     });
 
@@ -466,13 +430,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-
     preloadImages();
 
     let konamiCode = [];
-    const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; 
-
-    const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; 
+    const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
 
     document.addEventListener('keydown', function(e) {
         konamiCode.push(e.keyCode);
@@ -480,10 +441,7 @@ document.addEventListener('DOMContentLoaded', function() {
             konamiCode.shift();
         }
 
-
         if (konamiCode.join(',') === konami.join(',')) {
-
-
             document.body.style.animation = 'rainbow 2s ease-in-out';
             setTimeout(() => {
                 document.body.style.animation = '';
@@ -498,29 +456,24 @@ document.addEventListener('DOMContentLoaded', function() {
             50% { filter: hue-rotate(360deg); }
         }
 
-
         @keyframes blink {
             0%, 50% { opacity: 1; }
             51%, 100% { opacity: 0; }
         }
-
 
         .cursor {
             color: #3b82f6;
             font-weight: 300;
         }
 
-
         .scroll-progress {
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
         }
-
 
         .section-active {
             opacity: 1 !important;
             transform: translateY(0) !important;
         }
-
 
         .fade-in-active {
             opacity: 1 !important;
