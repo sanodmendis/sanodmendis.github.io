@@ -81,7 +81,9 @@ class FyuXeraNavbar {
         const navLinks = document.getElementById('navLinks');
 
         if (mobileMenuToggle && navLinks) {
-            mobileMenuToggle.addEventListener('click', () => {
+
+            mobileMenuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
                 this.toggleMobileMenu();
             });
 
@@ -89,35 +91,52 @@ class FyuXeraNavbar {
             links.forEach(link => {
                 link.addEventListener('click', () => {
                     if (this.mobileMenuOpen) {
-                        this.toggleMobileMenu();
+                        this.closeMobileMenu();
                     }
                 });
             });
 
             document.addEventListener('click', (event) => {
                 if (this.mobileMenuOpen && 
-                    !mobileMenuToggle.contains(event.target) && 
-                    !navLinks.contains(event.target)) {
-                    this.toggleMobileMenu();
+                    !navLinks.contains(event.target) && 
+                    !mobileMenuToggle.contains(event.target)) {
+                    this.closeMobileMenu();
                 }
+            });
+
+            navLinks.addEventListener('click', (e) => {
+                e.stopPropagation();
             });
         }
     }
 
     toggleMobileMenu() {
+        if (this.mobileMenuOpen) {
+            this.closeMobileMenu();
+        } else {
+            this.openMobileMenu();
+        }
+    }
+
+    openMobileMenu() {
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const navLinks = document.getElementById('navLinks');
 
         if (mobileMenuToggle && navLinks) {
-            this.mobileMenuOpen = !this.mobileMenuOpen;
+            this.mobileMenuOpen = true;
+            mobileMenuToggle.classList.add('active');
+            navLinks.classList.add('mobile-active');
+        }
+    }
 
-            if (this.mobileMenuOpen) {
-                mobileMenuToggle.classList.add('active');
-                navLinks.classList.add('mobile-active');
-            } else {
-                mobileMenuToggle.classList.remove('active');
-                navLinks.classList.remove('mobile-active');
-            }
+    closeMobileMenu() {
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        if (mobileMenuToggle && navLinks) {
+            this.mobileMenuOpen = false;
+            mobileMenuToggle.classList.remove('active');
+            navLinks.classList.remove('mobile-active');
         }
     }
 
@@ -167,8 +186,16 @@ class FyuXeraNavbar {
 
             .download-cv-btn.disabled:hover {
                 background-color: #6b7280;
-                transform: none;
-                box-shadow: none;
+            }
+
+            @media (max-width: 768px) {
+                .fyuxera-navbar .nav-links a.active::after {
+                    display: none;
+                }
+
+                .fyuxera-navbar .nav-links a.active {
+                    background-color: rgba(79, 156, 249, 0.1);
+                }
             }
         `;
         document.head.appendChild(style);
