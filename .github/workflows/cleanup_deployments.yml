@@ -1,0 +1,37 @@
+name: Cleanup old deployments
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete old deployments
+        env:
+          ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          PROJECT_NAME: ${{ secrets.CF_PROJECT_NAME }}
+          TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          DEPLOYMENTS=$(curl -s -X GET \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Content-Type: application/json" \
+            "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/$PROJECT_NAME/deployments" \
+            | jq -r '.result[].id')
+
+          FIRST=1
+          for DEPLOY in $DEPLOYMENTS; do
+            if [ $FIRST -eq 1 ]; then
+              FIRST=0
+              echo "Keeping latest deployment $DEPLOY"
+            else
+              echo "Deleting $DEPLOY"
+              curl -s -X DELETE \
+                -H "Authorization: Bearer $TOKEN" \
+                -H "Content-Type: application/json" \
+                "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/pages/projects/$PROJECT_NAME/deployments/$DEPLOY"
+            fi
+          done
